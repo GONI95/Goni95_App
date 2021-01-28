@@ -34,6 +34,24 @@
 </pre>
 
 
-### 3. 
-
-테마에서 메테리얼 소스 추가 후 데이나잇을 노액션바로 변경 -> 메니페스트에서 테마 적용
+### 3. 메테리얼 테마를 NoActionBar로 적용
+* themes.xml 
+<pre>
+   <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</pre>
+* AndroidManifest.xml
+<pre>
+   android:theme="@style/Theme.MyApp">
+</pre>

@@ -4,7 +4,8 @@
 
 ### 1. git과 안드로이드 프로젝트 연결
 <pre>
-- GitBash 처음 사용할 경우 git config --global user.name "Your Name Here" git config --global user.email "your_email@youremail.com"
+- GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
+                            git config --global user.email "your_email@youremail.com"
 
 - Repository를 생성 : mkdir /MyProject
 

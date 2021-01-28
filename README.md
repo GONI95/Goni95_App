@@ -30,8 +30,7 @@
 
 ### 2. build.gragle 라이브러리 추가 
 <pre>
-- navigation, Actibity ktx, retrofit, naver dynamic map, 
-google location, tedpermission, material theme
+- implementation 'com.google.android.material:material:1.2.1'
 </pre>
 
 

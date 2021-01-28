@@ -53,7 +53,6 @@
 ~~~
 
 * AndroidManifest.xml
-<code>
 ~~~xml
 <application
         android:allowBackup="true"
@@ -63,4 +62,3 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
 ~~~
-</code>

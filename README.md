@@ -2,6 +2,8 @@
 
 ##### [3. Material 테마를 NoActionBar로 적용](#3.-Material)
 
+------------
+
 ### 1. git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 

@@ -1,6 +1,7 @@
 # Goni95_App
 
-# readme
+# [Stack](#themes.xml)
+#Stack Program
 
 ### 1. git과 안드로이드 프로젝트 연결
 <pre>
@@ -9,7 +10,7 @@
 
 - Repository를 생성 : mkdir /MyProject
 
-- 디렉토리로 이동 : cd ~/MyProject   (로컬 컴퓨터의 최상위 단계 디렉토리, 즉 Users 폴더를 의미)
+- 디렉토리로 이동 : cd ~/MyProject (로컬 컴퓨터의 최상위 단계 디렉토리, Users 폴더를 의미)
 
 - 로컬 저장소와 깃허브 원격 저장소 연결 : git remote add origin 깃 주소
 
@@ -29,13 +30,13 @@
 
 </pre>
 
-### 2. build.gragle 라이브러리 추가 
+### 2. build.gragle
 <pre>
 - implementation 'com.google.android.material:material:1.2.1'
 </pre>
 
 
-### 3. 메테리얼 테마를 NoActionBar로 적용
+### 3. Material 테마를 NoActionBar로 적용
 * themes.xml 
 ~~~xml
    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">

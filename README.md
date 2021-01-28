@@ -51,6 +51,7 @@
         <!-- Customize your theme here. -->
     </style>
 </pre>
+
 * AndroidManifest.xml
 <pre>
    android:theme="@style/Theme.MyApp">

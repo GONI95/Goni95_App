@@ -1,6 +1,6 @@
 # Goni95_App
 
-# [Stack](#themes.xml)
+##### [Stack](#themes.xml)
 #Stack Program
 
 ### 1. git과 안드로이드 프로젝트 연결

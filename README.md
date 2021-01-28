@@ -36,7 +36,6 @@
 
 ### 3. 메테리얼 테마를 NoActionBar로 적용
 * themes.xml 
-<code>
 ~~~xml
    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
@@ -52,7 +51,6 @@
         <!-- Customize your theme here. -->
     </style>
 ~~~
-</code>
 
 * AndroidManifest.xml
 <code>

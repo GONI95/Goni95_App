@@ -8,4 +8,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
+
+    // 제작하다가, 메인에 네비게이션 달아서 사용할지, 따로 사용할지 정해야함
 }

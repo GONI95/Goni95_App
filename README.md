@@ -1,7 +1,6 @@
 # Goni95_App
 
-##### [Stack](#themes.xml)
-#Stack Program
+##### [3. Material 테마를 NoActionBar로 적용](#3.-Material)
 
 ### 1. git과 안드로이드 프로젝트 연결
 <pre>

@@ -37,8 +37,7 @@
 ### 3. 메테리얼 테마를 NoActionBar로 적용
 * themes.xml 
 <pre>
-<code>
-{
+~~~xml
    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -52,14 +51,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-}
-</code>
+~~~
 </pre>
 
 * AndroidManifest.xml
 <pre>
-<code>
-'''
+~~~xml
 <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -67,6 +64,5 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-'''
-</code>
+~~~
 </pre>

@@ -36,7 +36,6 @@
 
 ### 3. 메테리얼 테마를 NoActionBar로 적용
 * themes.xml 
-<pre>
 <code>
 ~~~xml
    <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
@@ -54,10 +53,8 @@
     </style>
 ~~~
 </code>
-</pre>
 
 * AndroidManifest.xml
-<pre>
 <code>
 ~~~xml
 <application
@@ -69,4 +66,3 @@
         android:theme="@style/Theme.MyApp">
 ~~~
 </code>
-</pre>

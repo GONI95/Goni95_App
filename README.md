@@ -59,7 +59,7 @@
 * AndroidManifest.xml
 <pre>
 <code>
-{
+'''
 <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -67,6 +67,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-}
+'''
 </code>
 </pre>

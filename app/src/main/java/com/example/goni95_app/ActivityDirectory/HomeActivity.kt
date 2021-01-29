@@ -18,7 +18,6 @@ class HomeActivity : AppCompatActivity() {
 
     private var currentSearchType: SEARCH_TYPE = SEARCH_TYPE.PHOTO
     private lateinit var binding: ActivityHomeBinding
-    //private lateinit var include : CustomlayoutButtonBinding
 
     @SuppressLint("UseCompatLoadingForDrawables", "InflateParams")
     // Lint가 주석이 달린 요소에 대한 value로 지정된 경고를 무시하는 것을 의미
@@ -28,12 +27,8 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        //include = binding.include
 
         Log.d(Constants.TAG, "HomeActivity : onCreate() call")
-
-        //val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        //val v = inflater.inflate(R.layout.customlayout_button, null)
 
         //라디오 그룹
         binding.searchRadioGroup.setOnCheckedChangeListener { _, checkedId ->

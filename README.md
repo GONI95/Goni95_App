@@ -67,7 +67,7 @@
 ~~~
 
 ### 2. 01_ui
-#2-1. Kotlin Extension Functions
+2-1. #Kotlin Extension Functions
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){

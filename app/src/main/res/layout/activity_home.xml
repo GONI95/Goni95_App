@@ -23,6 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- 라디오그룹 -->
         <RadioGroup
             android:id="@+id/search_radioGroup"
             android:layout_width="wrap_content"
@@ -34,34 +35,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
+            <!-- 메테리얼 사진검색 라디오버튼 -->
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radiobutton_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="사진검색" />
+                android:text="@string/Photo_search" />
 
+            <!-- 메테리얼 사용자검색 라디오버튼 -->
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radiobutton_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:checked="false"
-                android:text="사용자 검색" />
+                android:text="@string/User_search" />
         </RadioGroup>
 
+        <!-- 메테리얼 EditText Layout -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/search_text_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:hint="@string/search_value"
+            android:hint="@string/Photo_search"
             app:boxStrokeColor="@color/design_default_color_primary"
             app:counterEnabled="true"
             app:counterMaxLength="15"
             app:endIconMode="clear_text"
-            app:helperText="검색어를 입력하시오"
+            app:helperText="@string/Enter_search_word"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.075"
@@ -72,6 +76,7 @@
             <!-- hint부터 : 클릭 시 힌트 출력, 입력 창 아래 설명추가, 글자 수 카운트 기능 활성
             , 글자 수 설정, 입력창 시작부분에 아이콘, 클릭 시 입력창 색 변화, 입력시 클리어 버튼 -->
 
+            <!-- 메테리얼 EditText -->
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_edit_text"
                 android:layout_width="match_parent"
@@ -81,6 +86,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- 메테리얼 Button -->
         <include
             android:id="@+id/include"
             layout="@layout/customlayout_button"

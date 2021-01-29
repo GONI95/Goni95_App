@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:paddingVertical="10dp"
-        android:text="SEARCH"
+        android:text="@string/search"
         android:textColor="@color/black" />
 
     <ProgressBar

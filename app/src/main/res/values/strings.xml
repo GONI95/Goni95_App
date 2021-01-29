@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Goni95_App</string>
 
-    <!-- activity_home.xml -->
-    <string name="search_value">사진검색</string>
+    <!-- activity_home.xml / HomeAcitivty.kt -->
+    <string name="Photo_search">사진검색</string>
+    <string name="User_search">사용자검색</string>
+    <string name="Enter_search_word">검색어를 입력하시오.</string>
+    <string name="String_length_limit">검색어 제한 : 15자</string>
+
+    <!-- customlayout_button -->
+    <string name="search">SEARCH</string>
+
 </resources>

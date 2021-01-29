@@ -37,7 +37,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.radiobutton_photo -> {
                     Log.d(Constants.TAG, "HomeActivity : 사진검색 라디오 버튼 클릭(search_text_layout 변경)")
                     binding.searchTextLayout.apply {
-                        hint = "사진검색"
+                        hint = getString(R.string.Photo_search)
                         startIconDrawable =
                             resources.getDrawable(R.drawable.ic_photo_library, resources.newTheme())
                     }
@@ -46,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.radiobutton_user -> {
                     Log.d(Constants.TAG, "HomeActivity : 사용자검색 라디오 버튼 클릭(search_text_layout 변경)")
                     binding.searchTextLayout.apply {
-                        hint = "사용자검색"
+                        hint = getString(R.string.User_search)
                         startIconDrawable =
                             resources.getDrawable(R.drawable.ic_people, resources.newTheme())
                         // 새 테마 개체를 생성한다, 처음에는 비어있는 상태로 시작됨
@@ -67,13 +67,16 @@ class HomeActivity : AppCompatActivity() {
                 // 스크롤뷰 올리기
                 homeScrollview.scrollTo(0, 400)
             }
+            // 입력된 글자가 없다면
             else binding.apply {
                 include.root.visibility = View.INVISIBLE
-                searchTextLayout.helperText = "검색어를 입력하시오"
+                searchTextLayout.helperText = getString(R.string.Enter_search_word)
             }
-            if(it.toString().count() == 12) Toast.makeText(this, "검색어 제한 : 15자", Toast.LENGTH_SHORT).show()
+            //검색어 제한 토스트
+            if(it.toString().count() == 12) Toast.makeText(this, getString(R.string.String_length_limit), Toast.LENGTH_SHORT).show()
         }
 
+        // SEARCH 버튼 이벤트
         binding.include.searchButton.setOnClickListener {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
             handleSearchButton()
@@ -86,7 +89,7 @@ class HomeActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             binding.include.btnProgress.visibility = View.INVISIBLE
-            binding.include.searchButton.text = "SEARCH"
+            binding.include.searchButton.text = getString(R.string.search)
         }, 1500)
 
     }

@@ -1,10 +1,10 @@
 # Goni95_App
 ### 사용 기술
-* [2-1. Kotlin Extension Functions](#Kotlin Extension Functions)
+* [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
 * 
 * 
 ### 특징
-* [1-1. Material NoActionBar](#Material NoActionBar)
+* [1-1. Material NoActionBar](#Material-NoActionBar)
 
 ------------
 

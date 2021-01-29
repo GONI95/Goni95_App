@@ -6,19 +6,19 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/search_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:clickable="true"
-        android:text="SEARCH"
         android:paddingVertical="10dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+        android:text="SEARCH"
+        android:textColor="@color/black" />
 
     <ProgressBar
         android:id="@+id/btn_progress"
         android:layout_gravity="center"
         android:visibility="invisible"
-        android:layout_width="20dp"
-        android:layout_height="20dp"/>
+        android:layout_width="25dp"
+        android:layout_height="25dp"/>
 
 </FrameLayout>

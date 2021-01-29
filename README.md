@@ -37,6 +37,7 @@
 
 ### 1. test
 #### 1-1. Material NoActionBar
+#Material-NoActionBar
 * themes.xml 
 ~~~xml
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -67,7 +68,7 @@
 ~~~
 
 ### 2. 01_ui
-2-1. #Kotlin Extension Functions
+#### 2-1. Kotlin Extension Functions
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){

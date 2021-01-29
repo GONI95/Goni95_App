@@ -4,7 +4,8 @@
 * 
 * 
 ### 특징
-[1-1. Material NoActionBar](#Material-NoActionBar)
+* [1-1. Material NoActionBar](#Material-NoActionBar)
+* [2-2. Material Theme Handle](#Material-Theme-Handle)
 
 ------------
 
@@ -91,3 +92,89 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
+* HomeActivity.kt
+~~~kotlin
+fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
+    this.addTextChangedListener(object : TextWatcher {
+      
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // 's' 문자열에서 "start" 위치로 부터 "count" 길이만큼 "after"로 변경될 예정임을 알림
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // 's'가 start 위치로 부터 count 길이만큼 변경되었다는 것을 알려준다. 이전 문자열에서 before 길이만큼 변경되었다는 것을 알린다.
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+            // 's' 내의 어떤 문자열이 변경되었다는 것을 알려준다.
+            completion(editable)
+        }
+    })
+}
+~~~
+
+#### 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
+## Material-Theme-Handle
+* activity_home
+~~~kotlin
+        <RadioGroup
+            android:id="@+id/search_radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/search_text_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3">
+
+            <!-- 메테리얼 사진검색 라디오버튼 -->
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radiobutton_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/Photo_search" />
+
+            <!-- 메테리얼 사용자검색 라디오버튼 -->
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radiobutton_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:checked="false"
+                android:text="@string/User_search" />
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_text_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="@string/Photo_search"
+            app:boxStrokeColor="@color/design_default_color_primary"
+            app:counterEnabled="true"
+            app:counterMaxLength="15"
+            app:endIconMode="clear_text"
+            app:helperText="@string/Enter_search_word"
+            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_radioGroup"
+            app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
+            app:startIconDrawable="@drawable/ic_photo_library">
+            <!-- hint부터 : 클릭 시 힌트 출력, 입력 창 아래 설명추가, 글자 수 카운트 기능 활성
+            , 글자 수 설정, 입력창 시작부분에 아이콘, 클릭 시 입력창 색 변화, 입력시 클리어 버튼 -->
+
+            <!-- 메테리얼 EditText -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:maxLength="15" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+~~~

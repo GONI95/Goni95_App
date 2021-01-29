@@ -66,7 +66,3 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
 ~~~
-
-<pre>
-   android:theme="@style/Theme.MyApp">
-</pre>

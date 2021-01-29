@@ -116,7 +116,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 #### 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
 ## Material-Theme-Handle
 * activity_home
-~~~
+~~~xml
         <RadioGroup
             android:id="@+id/search_radioGroup"
             android:layout_width="wrap_content"

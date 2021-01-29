@@ -34,6 +34,18 @@
 
 - 파일 올리기 : git push
 
+- 브런치 생성 : git branch 브런치명
+
+- 브런치 변경 : git checkout 브런치명
+
+- 브런치에서 올리기 : git add -A
+                     git commit -m "메시지"
+                     git push --set-upstream 로컬저장소 브런치명 (로컬을 브런치로 올리기)
+                         
+- master 브런치 합병 : git checkout 마스터브런치명
+                      git merge 브런치명
+                      git push
+                      git pull 로컬저장소명 마스터브런치명                
 </pre>
 
 ### 1. test

@@ -1,10 +1,14 @@
 # Goni95_App
-
-##### [3. Material 테마를 NoActionBar로 적용](#3.-Material)
+### 사용 기술
+* [2-1. Kotlin Extension Functions](#2-1.)
+* 
+* 
+### 특징
+* [1-1. Material NoActionBar](#1-1.)
 
 ------------
 
-### 1. git과 안드로이드 프로젝트 연결
+### git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
                             git config --global user.email "your_email@youremail.com"
@@ -31,16 +35,11 @@
 
 </pre>
 
-### 2. build.gragle
-<pre>
-- implementation 'com.google.android.material:material:1.2.1'
-</pre>
-
-
-### 3. Material 테마를 NoActionBar로 적용
+### 1. test
+#### 1-1. Material NoActionBar
 * themes.xml 
 ~~~xml
-   <style name="Theme.MyApp" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -66,3 +65,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
 ~~~
+
+### 2. 01_ui
+#### 2-1. Kotlin Extension Functions
+* Extensions.kt
+~~~kotlin
+fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
+    this.addTextChangedListener(object : TextWatcher {
+      
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // 's' 문자열에서 "start" 위치로 부터 "count" 길이만큼 "after"로 변경될 예정임을 알림
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // 's'가 start 위치로 부터 count 길이만큼 변경되었다는 것을 알려준다. 이전 문자열에서 before 길이만큼 변경되었다는 것을 알린다.
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+            // 's' 내의 어떤 문자열이 변경되었다는 것을 알려준다.
+            completion(editable)
+        }
+    })
+}
+~~~
+

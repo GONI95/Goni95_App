@@ -4,7 +4,7 @@
 * 
 * 
 ### 특징
-* [1-1. Material NoActionBar](#Material-NoActionBar)
+[1-1. Material NoActionBar](#Material-NoActionBar)
 
 ------------
 
@@ -37,7 +37,7 @@
 
 ### 1. test
 #### 1-1. Material NoActionBar
-#Material-NoActionBar
+## Material-NoActionBar
 * themes.xml 
 ~~~xml
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">

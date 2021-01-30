@@ -54,6 +54,7 @@ dependencies {
 
     //레트로핏
     def retrofit_version = "2.8.1"
+    //noinspection GradleDependency
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     //지슨 (json -> 객체, 객체 -> json / 객체가 든 배열 -> jsonArray)
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

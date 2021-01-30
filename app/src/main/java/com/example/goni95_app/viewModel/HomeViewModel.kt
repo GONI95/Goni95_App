@@ -7,7 +7,6 @@ import com.example.goni95_app.retrofit.RetrofitClient
 import com.example.goni95_app.util.API
 import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
-import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonElement
 import retrofit2.Call
 import retrofit2.Response

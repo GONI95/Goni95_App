@@ -12,6 +12,7 @@ fun String?.isJsonObject():Boolean {
 fun String?.isJsonArray():Boolean {
     return this?.startsWith("[") == true && this.endsWith("]")
 }
+
 /*
 if(this?.startsWith("{") == true && this.endsWith("}")) return true
 else return false

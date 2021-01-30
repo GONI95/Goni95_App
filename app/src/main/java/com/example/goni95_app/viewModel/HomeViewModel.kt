@@ -2,17 +2,20 @@ package com.example.goni95_app.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.goni95_app.retrofit.IRetrofit_Service
 import com.example.goni95_app.retrofit.RetrofitClient
-import com.example.goni95_app.util.API
-import com.example.goni95_app.util.Constants
-import com.example.goni95_app.util.RESPONSE_STATE
+import com.example.goni95_app.util.*
 import com.google.gson.JsonElement
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.Exception
 
 class HomeViewModel : ViewModel() {
-
     // http call 생성
     // 레트로핏 인터페이스 가져오기
     private val iretrofitService : IRetrofit_Service
@@ -26,25 +29,80 @@ class HomeViewModel : ViewModel() {
     //사진검색 api 호출
     fun searchPhotos(searchTerm: String?, completion: (RESPONSE_STATE, String) -> Unit){
         val term = searchTerm.let { it } ?: ""
-        val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
 
-        call.enqueue(object : retrofit2.Callback<JsonElement> {
-            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-                Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} - onResponse() called : response.raw(): ${response.raw()}")
-                Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} - onResponse() called : response.body(): ${response.body()}")
-
-                completion(RESPONSE_STATE.OK, response.raw().toString())
-                // 처리한 로직에 따라 HomeActivity의 s, b로 반환
-            }
-
-            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} - onFailure() called : t: $t")
-
-                completion(RESPONSE_STATE.FAIL, t.toString())
-                // 처리한 로직에 따라 HomeActivity의 s, b로 반환
-            }
-
-        })
+        viewModelScope.launch(Dispatchers.IO){
+            val call = iretrofitService?.serachPhotos(searchTerm = term).let { it.toString() } ?: return@launch
+            Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / result : ${JSONObject(call).toString(4)}")
+            
+            completion(RESPONSE_STATE.OK, JSONObject(call).toString(4))
+        }
     }
 
 }
+
+
+
+
+// jsonelement를 jsonobject, jsonarray로 비교해서 변환하여 출력
+/*
+fun searchPhotos(searchTerm: String?, completion: (RESPONSE_STATE, String) -> Unit){
+        val term = searchTerm.let { it } ?: ""
+        //val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
+
+        viewModelScope.launch(Dispatchers.IO){
+            var result = iretrofitService.serachPhotos(term)
+            Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / result : ${result}")
+
+
+            when {
+                result.isJsonObject -> {
+                    aa = JSONObject(result.toString()).toString(4)
+                    Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result.toString()).toString(4)}"
+                    )
+                }
+                result.isJsonArray -> {
+                    aa = JSONObject(result.toString()).toString(4)
+                    Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result.toString()).toString(4)}")
+                }
+                else -> {
+                    try {
+                        Log.d(
+                            Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result.toString()).toString(4)}"
+                        )
+                    } catch (e: Exception) {
+                        Log.d(
+                            Constants.TAG, "${HomeViewModel::class.java.simpleName} / error : $e, message : $result"
+                        )
+                    }
+                }
+            }
+            completion(RESPONSE_STATE.OK, aa)
+        }
+    }
+ */
+
+// jsonelement를 확장함수로 비교해서 변환하여 출력
+/*
+when {
+                result.isJsonObject() -> {
+                    result = JSONObject(result).toString(4)
+                    Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result).toString(4)}"
+                    )
+                }
+                result.isJsonArray() -> {
+                    result = JSONObject(result).toString(4)
+                    Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result).toString(4)}")
+                }
+                else -> {
+                    try {
+                        Log.d(
+                            Constants.TAG, "${HomeViewModel::class.java.simpleName} / message : ${JSONObject(result).toString(4)}"
+                        )
+                    } catch (e: Exception) {
+                        Log.d(
+                            Constants.TAG, "${HomeViewModel::class.java.simpleName} / error : $e, message : $result"
+                        )
+                    }
+                }
+            }
+ */

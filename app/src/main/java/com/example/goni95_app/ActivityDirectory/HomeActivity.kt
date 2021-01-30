@@ -50,7 +50,6 @@ class HomeActivity : AppCompatActivity() {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
             //검색 api 호출
-            /*
             viewModel.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
                 response_state, response_body ->
 
@@ -63,21 +62,6 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
             })
-             */
-
-            viewModel.searchPhotos(searchTerm = binding.searchEditText.text.toString()) {
-                responseState, responseBody ->
-                // 입력값을 보내면서, 반환을 s, b로 받겠다.
-
-                when(responseState){
-                    RESPONSE_STATE.OK -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responseBody}")
-                    }
-                    RESPONSE_STATE.FAIL -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responseBody}")
-                    }
-                }
-            }
 
             handleSearchButton()
         }
@@ -142,27 +126,3 @@ class HomeActivity : AppCompatActivity() {
 
     }
 }
-
-
-/*
- // SEARCH 버튼 이벤트
-        binding.include.searchButton.setOnClickListener {
-            Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
-
-            //검색 api 호출
-            RetrofitManager.instance.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
-                response_state, response_body ->
-
-                when(response_state){
-                    RESPONSE_STATE.OK -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body}")
-                    }
-                    RESPONSE_STATE.FAIL -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${response_body}")
-                    }
-                }
-            })
-
-            handleSearchButton()
-        }
- */

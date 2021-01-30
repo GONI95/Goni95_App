@@ -11,11 +11,11 @@ import com.google.gson.JsonElement
 interface IRetrofit_Service {
 
     @GET(API.SEARCH_PHOTOS)
-    fun serachPhotos(@Query("query") searchTerm : String) : Call<JsonElement>
+    suspend fun serachPhotos(@Query("query") searchTerm : String) : JsonElement
     // 사진 검색 서비스 http://www.unsplash.com/serach/photos/?query=입력값
 
     @GET(API.SEARCH_USERS)
-    fun searchUsers(@Query("query") searchTerm : String) : Call<JsonElement>
+    suspend fun searchUsers(@Query("query") searchTerm : String) : JsonElement
     // 사용자 검색 서비스
 }
 

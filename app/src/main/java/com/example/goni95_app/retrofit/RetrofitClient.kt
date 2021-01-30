@@ -30,6 +30,7 @@ object RetrofitClient {
         val client = OkHttpClient.Builder()
 
         // 로그를 찍기 위한 로깅 인터셉터 설정
+
         val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
 
@@ -56,6 +57,7 @@ object RetrofitClient {
         })
         // 위에서 생성한 로깅 인터셉터를 okhttp client에 추가
         client.addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY))
+
 
         // 기본 파라미터 인터셉터 설정
         val baseParameterInterceptor = (object : Interceptor {

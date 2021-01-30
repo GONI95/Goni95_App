@@ -78,7 +78,7 @@ object RetrofitClient {
         // 위에서 생성한 기본 파라미터 인터셉터를 okhttp clent에 추가
         client.addInterceptor(baseParameterInterceptor)
 
-        // 커넥션 타임아웃웃
+        // 커넥션 타임아웃
         client.connectTimeout(3000, TimeUnit.MILLISECONDS)     //커넥션 작업의 타임아웃
         client.readTimeout(3000, TimeUnit.MILLISECONDS)       //읽기 작업의 타임아웃
         client.writeTimeout(3000, TimeUnit.MILLISECONDS)       //쓰기 작업의 타임아웃

@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityHomeBinding
+import com.example.goni95_app.retrofit.RetrofitManager
 import com.example.goni95_app.util.Constants
+import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
 
@@ -79,6 +81,21 @@ class HomeActivity : AppCompatActivity() {
         // SEARCH 버튼 이벤트
         binding.include.searchButton.setOnClickListener {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
+
+            //검색 api 호출
+            RetrofitManager.instance.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
+                response_state, response_body ->
+
+                when(response_state){
+                    RESPONSE_STATE.OK -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body}")
+                    }
+                    RESPONSE_STATE.FAIL -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${response_body}")
+                    }
+                }
+            })
+
             handleSearchButton()
         }
     }// onCreate

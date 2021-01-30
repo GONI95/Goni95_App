@@ -43,10 +43,24 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    //noinspection GradleDynamicVersion
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //메테리얼 테마
-    implementation 'com.google.android.material:material:1.2.1'
+    def material_version = "1.2.1"
+    implementation "com.google.android.material:material:$material_version"
+
+    //레트로핏
+    def retrofit_version = "2.8.1"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    //지슨 (json -> 객체, 객체 -> json / 객체가 든 배열 -> jsonArray)
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    //인터셉터 : 토큰 인증 방식 통신때 매번 헤더에 토큰을 넣어 보내줘야하는 요청을 해야하는 문제가 발생, 헤더에 계속해서 매개변수를 추가해줘야하는 것
+    // OkHttp interceptor를 이용해 요청 중간에 클라이언트가 연결이 되어있다면 헤더에 토큰을 추가하여 요청, 토큰이 만료라면 토큰을 갱신하는
+    // api.refreshToken 메서드를 실행하여 요청받은 결과로 얻은 토큰을 클라이언트에 갱ㅅ신
+    // 1. 기본매개변수, 로깅확인(헤더,바디를 로그로 볼 수 있음),
+    def interceptor_version = "4.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
 }

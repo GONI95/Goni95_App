@@ -34,12 +34,14 @@ class HomeViewModel : ViewModel() {
                 Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} - onResponse() called : response.body(): ${response.body()}")
 
                 completion(RESPONSE_STATE.OK, response.raw().toString())
+                // 처리한 로직에 따라 HomeActivity의 s, b로 반환
             }
 
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} - onFailure() called : t: $t")
 
                 completion(RESPONSE_STATE.FAIL, t.toString())
+                // 처리한 로직에 따라 HomeActivity의 s, b로 반환
             }
 
         })

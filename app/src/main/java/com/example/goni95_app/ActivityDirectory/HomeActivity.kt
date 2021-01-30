@@ -17,7 +17,7 @@ import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
 import com.example.goni95_app.viewModel.HomeViewModel
 
-
+//completion : https://blog.yena.io/studynote/2017/11/22/Kotlin-Lambda.html
 class HomeActivity : AppCompatActivity() {
     //viewModel 선언
     private val viewModel by viewModels<HomeViewModel>()
@@ -50,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
             //검색 api 호출
+            /*
             viewModel.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
                 response_state, response_body ->
 
@@ -62,6 +63,21 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
             })
+             */
+
+            viewModel.searchPhotos(searchTerm = binding.searchEditText.text.toString()) {
+                responseState, responseBody ->
+                // 입력값을 보내면서, 반환을 s, b로 받겠다.
+
+                when(responseState){
+                    RESPONSE_STATE.OK -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responseBody}")
+                    }
+                    RESPONSE_STATE.FAIL -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responseBody}")
+                    }
+                }
+            }
 
             handleSearchButton()
         }

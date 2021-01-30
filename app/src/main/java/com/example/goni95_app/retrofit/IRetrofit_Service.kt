@@ -11,7 +11,6 @@ import retrofit2.http.Headers
 // unsplash api : https://unsplash.com/documentation#registering-your-application
 interface IRetrofit_Service {
 
-    @Headers(API.CLIENT_ID)
     @GET(API.SEARCH_PHOTOS)
     fun serachPhotos(@Query("query") searchTerm : String) : Call<JsonElement>
     // 사진 검색 서비스 http://www.unsplash.com/serach/photos/?query=입력값

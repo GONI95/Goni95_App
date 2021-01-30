@@ -4,6 +4,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 
+// 문자열이 제이슨 형태인지, 제이슨 배열 형태인지 확인
+fun String?.isJsonObject():Boolean {
+    return this?.startsWith("{") == true && this.endsWith("}")
+    // 위와 같으면 true 아니면 false
+}
+fun String?.isJsonArray():Boolean {
+    return this?.startsWith("[") == true && this.endsWith("]")
+}
+/*
+if(this?.startsWith("{") == true && this.endsWith("}")) return true
+else return false
+ */
+
 // 코틀린 확장 함수(Kotlin extension functions)
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
     // 빈 값이 올 수 있으니 Editable?

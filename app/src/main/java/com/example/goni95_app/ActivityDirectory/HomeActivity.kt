@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityHomeBinding
@@ -14,10 +15,12 @@ import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
+import com.example.goni95_app.viewModel.HomeViewModel
 
 
 class HomeActivity : AppCompatActivity() {
-
+    //viewModel 선언
+    private val viewModel by viewModels<HomeViewModel>()
     private var currentSearchType: SEARCH_TYPE = SEARCH_TYPE.PHOTO
     private lateinit var binding: ActivityHomeBinding
 
@@ -75,7 +78,7 @@ class HomeActivity : AppCompatActivity() {
                 searchTextLayout.helperText = getString(R.string.Enter_search_word)
             }
             //검색어 제한 토스트
-            if(it.toString().count() == 12) Toast.makeText(this, getString(R.string.String_length_limit), Toast.LENGTH_SHORT).show()
+            if(it.toString().count() == 15) Toast.makeText(this, getString(R.string.String_length_limit), Toast.LENGTH_SHORT).show()
         }
 
         // SEARCH 버튼 이벤트
@@ -83,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
             //검색 api 호출
-            RetrofitManager.instance.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
+            viewModel.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
                 response_state, response_body ->
 
                 when(response_state){
@@ -111,3 +114,27 @@ class HomeActivity : AppCompatActivity() {
 
     }
 }
+
+
+/*
+ // SEARCH 버튼 이벤트
+        binding.include.searchButton.setOnClickListener {
+            Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
+
+            //검색 api 호출
+            RetrofitManager.instance.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
+                response_state, response_body ->
+
+                when(response_state){
+                    RESPONSE_STATE.OK -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body}")
+                    }
+                    RESPONSE_STATE.FAIL -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${response_body}")
+                    }
+                }
+            })
+
+            handleSearchButton()
+        }
+ */

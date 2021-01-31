@@ -446,9 +446,7 @@ class RetrofitManager {
 
 ####  일반적으로 함수는 매개변수와 반환값이 데이터지만, 고차함수는 매개변수로 함수를 전달받거나, 함수를 반환하는 함수를 말합니다.
 <https://androidtest.tistory.com/116> 
-
 <br>
-
 <https://taehyungk.github.io/posts/android-kotlin-high-order-function/>
 
 

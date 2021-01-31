@@ -370,12 +370,15 @@ object RetrofitClient {
 
 #### client.addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)) : 생성한 client에 interceptor를 추가
 
+<br>
 
 ## OkHttp-Interceptor
 
 #### 요청에 대해 Header 또는 Parameter 등을 재작성할 수 있다.
 #### 응답으로 온 chain 객체를 이용해 요청에 대해 공통적인 data를 달아줄 때 유용하고 Retrofit Api 인터페이스 정의 시 @Header Annotation을 달아줄 필요가 없어진다.
 ####  return chain.proceed(finalRequest) : proceed()메서드로 서버에 통신하고 응답을 받아온다.
+
+<br><br>
 
 ## Retrofit Client
 
@@ -424,12 +427,14 @@ class RetrofitManager {
  }
 ~~~
 
+<br>
 
 ## Network Request
 
 #### enqueue() : 비동기 Request를 보내고 Response가 돌아오면 콜백으로 앱에게 알려준다. 네트워크에 대한 작업은 비동기로 작업하도록 Background 스레드에서 처리해야 합니다.
-### onResponse(), onFailure() 콜백 메소드를 구현해야합니다. 수행한 Request에 대한 Response를 전달받아 처리할 수 있습니다.
+#### onResponse(), onFailure() 콜백 메소드를 구현해야합니다. 수행한 Request에 대한 Response를 전달받아 처리할 수 있습니다.
 
+<br><br>
 
 ## High-Order-Function
 

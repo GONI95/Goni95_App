@@ -12,7 +12,7 @@
 ------------
 
 
-
+<br><br><br>
 # git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
@@ -53,7 +53,7 @@
 </pre>
 
 
-
+<br><br><br>
 # test
 ## Material-NoActionBar
 
@@ -134,7 +134,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
     })
 }
 ~~~
-
+<br>
 ## Material-Theme-Handle
 
 * activity_home
@@ -203,7 +203,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 
-
+<br><br><br>
 # 02_retrofit
 ## retrofit-config
 

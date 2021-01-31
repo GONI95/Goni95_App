@@ -53,7 +53,7 @@
 
 
 ## + test
-### 1-1. Material NoActionBar ##Material-NoActionBar
+### 1-1. Material-NoActionBar 
 
 * themes.xml 
 ~~~xml

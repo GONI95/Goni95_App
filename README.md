@@ -364,12 +364,16 @@ object RetrofitClient {
 
 #### val client = OkHttpClient.Builder() : OkHttpClient.Builder() 클래스를 사용해 인스턴스를 생성
 #### val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger { ... }) : 네트워크 요청과 응답에 대한 로그를 볼 수 있다.
+
 <br>
+
 #### -NONE : 로그가 없습니다.
 #### -BASIC : 요청 및 응답 라인을 기록합니다.
 #### -HEADERS : 요청 및 응답 라인과 해당 헤더를 기록합니다.
 #### -BODY : 요청 및 응답 라인과 해당 헤더 및 본문 (있는 경우)을 기록합니다.
+
 <br>
+
 #### client.addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)) : 생성한 client에 interceptor를 추가
 
 <br>

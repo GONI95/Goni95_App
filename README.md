@@ -1,4 +1,4 @@
-# Goni95_App
+h1 = Goni95_App
 # 사용 기술
 * [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
 * 

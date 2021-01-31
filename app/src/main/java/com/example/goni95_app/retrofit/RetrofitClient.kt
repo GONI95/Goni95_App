@@ -1,10 +1,10 @@
 package com.example.goni95_app.retrofit
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import com.example.goni95_app.util.API
-import com.example.goni95_app.util.Constants
-import com.example.goni95_app.util.isJsonArray
-import com.example.goni95_app.util.isJsonObject
+import android.widget.Toast
+import com.example.goni95_app.util.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -72,7 +72,17 @@ object RetrofitClient {
                     .method(originalRequest.method, originalRequest.body)
                     .build()
 
-                return chain.proceed(finalRequest)
+                //return chain.proceed(finalRequest)
+                val response = chain.proceed(finalRequest) //오리지날 요청으로 변경하면 401에러 문제없이 출력됨
+
+                if(response.code != 200){
+                    Handler(Looper.getMainLooper()).post {
+                        //Handler() - android.os, 백그라운드 스레드에서 작업 중, ui 스레드에서 실행하도록 변경
+                        Toast.makeText(App.instance, "${response.code} 에러 입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                return response
             }
         })
         // 위에서 생성한 기본 파라미터 인터셉터를 okhttp clent에 추가

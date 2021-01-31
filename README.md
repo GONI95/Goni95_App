@@ -54,7 +54,7 @@
 
 
 
-#* test
+# test
 ## Material-NoActionBar
 
 * themes.xml 
@@ -89,7 +89,7 @@
 
 
 
-# * 01_ui
+# 01_ui
 ## Kotlin-Extension-Functions 
 
 * Extensions.kt
@@ -135,7 +135,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-### Material-Theme-Handle
+## Material-Theme-Handle
 
 * activity_home
 ~~~xml
@@ -204,7 +204,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 
-# + 03_ui
+# 03_ui
 ## Kotlin Extension Functions 
 
 * Extensions.kt

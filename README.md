@@ -1,13 +1,13 @@
 # Goni95_App
 # 사용 기술
-* [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
-* 
+* [1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
+* [2. Retrofit](#retrofit-config)
 * 
 
 
 # 특징
-* [1-1. Material NoActionBar](#Material-NoActionBar)
-* [2-2. Material Theme Handle](#Material-Theme-Handle)
+* [1. Material NoActionBar](#Material-NoActionBar)
+* [2. Material Theme Handle](#Material-Theme-Handle)
 
 ------------
 
@@ -204,8 +204,8 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 
-# 03_ui
-## Kotlin Extension Functions 
+# 02_retrofit
+## retrofit-config
 
 * Extensions.kt
 ~~~kotlin

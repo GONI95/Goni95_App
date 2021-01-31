@@ -12,7 +12,7 @@
 ------------
 
 
-<br><br><br>
+<br><br><br><br><br>
 # git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
@@ -53,9 +53,11 @@
 </pre>
 
 
-<br><br><br>
+<br><br><br><br><br>
 # Branch : test
 ## Material-NoActionBar
+
+<br>
 
 * themes.xml 
 ~~~xml
@@ -74,6 +76,7 @@
     </style>
 ~~~
 
+<br>
 
 * AndroidManifest.xml
 ~~~xml
@@ -87,7 +90,7 @@
 ~~~
 
 
-<br><br><br>
+<br><br><br><br><br>
 # Branch : 01_ui
 ## Kotlin-Extension-Functions 
 
@@ -134,10 +137,10 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-<br><br>
+<br><br><br>
 ## Material-Theme-Handle
 
-<br><br>
+<br>
 
 * activity_home
 ~~~xml
@@ -205,11 +208,11 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 
-<br><br><br>
+<br><br><br><br><br>
 # Branch : 02_retrofit
 ## retrofit-config
 
-<br><br>
+<br>
 
 * Extensions.kt
 ~~~kotlin

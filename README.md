@@ -133,8 +133,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-### 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
-## Material-Theme-Handle
+### 2-2. Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText )
 
 * activity_home
 ~~~xml

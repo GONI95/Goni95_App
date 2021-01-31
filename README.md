@@ -7,7 +7,7 @@
 
 # 특징
 * [1-1. Material NoActionBar](#Material-NoActionBar)
-* [2-2. Material Theme Handle](#Material-Theme-Handle)
+* [2-2. Material Theme Handle](#Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText))
 
 ------------
 
@@ -135,7 +135,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-### Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText )
+### Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText)
 
 * activity_home
 ~~~xml

@@ -54,7 +54,7 @@
 
 
 <br><br><br>
-# test
+# Branch : test
 ## Material-NoActionBar
 
 * themes.xml 
@@ -88,7 +88,7 @@
 
 
 <br><br><br>
-# 01_ui
+# Branch : 01_ui
 ## Kotlin-Extension-Functions 
 
 * Extensions.kt
@@ -136,6 +136,8 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 <br><br>
 ## Material-Theme-Handle
+
+<br><br>
 
 * activity_home
 ~~~xml
@@ -204,8 +206,10 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 <br><br><br>
-# 02_retrofit
+# Branch : 02_retrofit
 ## retrofit-config
+
+<br><br>
 
 * Extensions.kt
 ~~~kotlin

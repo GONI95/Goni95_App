@@ -56,6 +56,7 @@
 <br><br><br>
 # test
 ## Material-NoActionBar
+<br>
 * themes.xml 
 ~~~xml
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -73,7 +74,7 @@
     </style>
 ~~~
 
-
+<br>
 * AndroidManifest.xml
 ~~~xml
 <application
@@ -89,6 +90,7 @@
 <br><br><br>
 # 01_ui
 ## Kotlin-Extension-Functions 
+<br>
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
@@ -110,7 +112,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-
+<br>
 * HomeActivity.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
@@ -134,6 +136,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 <br><br>
 ## Material-Theme-Handle
+<br>
 * activity_home
 ~~~xml
         <RadioGroup
@@ -203,6 +206,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 <br><br><br>
 # 02_retrofit
 ## retrofit-config
+<br>
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){

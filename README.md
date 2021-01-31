@@ -9,6 +9,8 @@
 
 ------------
 
+
+
 # git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
@@ -48,9 +50,12 @@
                       git pull 로컬저장소명 마스터브런치명                
 </pre>
 
+
+
 ## + test
 ### 1-1. Material NoActionBar 
 ## Material-NoActionBar
+
 * themes.xml 
 ~~~xml
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -68,6 +73,7 @@
     </style>
 ~~~
 
+
 * AndroidManifest.xml
 
 ~~~xml
@@ -80,9 +86,12 @@
         android:theme="@style/Theme.MyApp">
 ~~~
 
+
+
 ## + 01_ui
 ### 2-1. Kotlin Extension Functions 
 ## Kotlin-Extension-Functions
+
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
@@ -103,6 +112,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
     })
 }
 ~~~
+
 
 * HomeActivity.kt
 ~~~kotlin
@@ -127,6 +137,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 ### 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
 ## Material-Theme-Handle
+
 * activity_home
 ~~~xml
         <RadioGroup
@@ -190,6 +201,8 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
         </com.google.android.material.textfield.TextInputLayout>
 ~~~
+
+
 
 ## + 03_ui
 ### 2-1. Kotlin Extension Functions 

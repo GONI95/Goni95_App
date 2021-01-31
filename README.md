@@ -246,7 +246,9 @@ object API {
 }
 ~~~
 enum class의 상수들은 객체로 취급하며, 레트로핏 통신의 성공 유무를 구분하기 위해서 선언
+<br>
 retrofit으로 네트워크 통신에 사용할 기본 자료형만 사용할 수 있는 상수를 object로 class를 정의(싱글턴 패턴)
+<br>
     //람다식으로 response_state와 string을 Unit type(리턴값이 없이 없음을 나타냄)
 
 <br>
@@ -352,10 +354,14 @@ object RetrofitClient {
     }
 }
 ~~~
-OkHttp의 Interceptor를 사용 
+OkHttp의 Interceptor를 사용
+<br>
 val client = OkHttpClient.Builder() : kHttpClient.Builder() 클래스를 사용해 인스턴스를 생성
+<br>
 val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger { ... }) : 네트워크 요청과 응답에 대한 로그를 볼 수 있다.
+<br>
 client.addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)) : 생성한 client에 interceptor를 추가
+<br>
 
 Retrofit을 이용해 REST API에 네트워크 요청을 보내기위해 
 retrofitClient = Retrofit.Builder() : Retrofit.Builder 클래스를 사용해 인스턴스를 생성

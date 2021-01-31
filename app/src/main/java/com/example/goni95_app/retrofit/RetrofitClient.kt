@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import com.example.goni95_app.App
 import com.example.goni95_app.util.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

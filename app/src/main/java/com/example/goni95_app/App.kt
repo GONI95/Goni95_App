@@ -1,4 +1,4 @@
-package com.example.goni95_app.util
+package com.example.goni95_app
 
 import android.app.Application
 

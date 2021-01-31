@@ -88,7 +88,7 @@ class HomeActivity : AppCompatActivity() {
 
                 when(response_state){
                     RESPONSE_STATE.OK -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body}")
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body?.size}")
                     }
                     RESPONSE_STATE.FAIL -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${response_body}")

@@ -1,5 +1,5 @@
-H1 = Goni95_App
-H1 = 사용 기술
+# Goni95_App
+# 사용 기술
 * [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
 * 
 * 
@@ -11,7 +11,7 @@ H1 = 사용 기술
 
 
 
-H1 = git과 안드로이드 프로젝트 연결
+# git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
                             git config --global user.email "your_email@youremail.com"
@@ -53,7 +53,7 @@ H1 = git과 안드로이드 프로젝트 연결
 
 
 ## + test
-### 1-1. Material NoActionBar 
+### 1-1. Material NoActionBar ##Material-NoActionBar
 
 * themes.xml 
 ~~~xml

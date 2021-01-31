@@ -3,6 +3,8 @@
 * [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
 * 
 * 
+
+
 # 특징
 * [1-1. Material NoActionBar](#Material-NoActionBar)
 * [2-2. Material Theme Handle](#Material-Theme-Handle)
@@ -53,7 +55,7 @@
 
 
 # * test
-## 1-1. Material-NoActionBar
+## Material-NoActionBar
 
 * themes.xml 
 ~~~xml
@@ -88,7 +90,7 @@
 
 
 # * 01_ui
-## 2-1. Kotlin-Extension-Functions 
+## Kotlin-Extension-Functions 
 
 * Extensions.kt
 ~~~kotlin
@@ -133,7 +135,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-### 2-2. Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText )
+### Material-Theme-Handle(RaidoButton, TextInputLayout, TextInputEditText )
 
 * activity_home
 ~~~xml
@@ -201,9 +203,10 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 
 
 
-## + 03_ui
-### 2-1. Kotlin Extension Functions 
-## Kotlin-Extension-Functions
+
+# + 03_ui
+## Kotlin Extension Functions 
+
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){

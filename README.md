@@ -354,20 +354,82 @@ object RetrofitClient {
     }
 }
 ~~~
+## OkHttp-HttpLoggingInterceptor
+<https://square.github.io/okhttp/interceptors/>
 
-### OkHttp의 Interceptor를 사용
-### val client = OkHttpClient.Builder() : kHttpClient.Builder() 클래스를 사용해 인스턴스를 생성
+### val client = OkHttpClient.Builder() : OkHttpClient.Builder() 클래스를 사용해 인스턴스를 생성
 ### val loggingInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger { ... }) : 네트워크 요청과 응답에 대한 로그를 볼 수 있다.
+
+#### -NONE : 로그가 없습니다.
+#### -BASIC : 요청 및 응답 라인을 기록합니다.
+#### -HEADERS : 요청 및 응답 라인과 해당 헤더를 기록합니다.
+#### -BODY : 요청 및 응답 라인과 해당 헤더 및 본문 (있는 경우)을 기록합니다.
+
 ### client.addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)) : 생성한 client에 interceptor를 추가
 
+
+## OkHttp-Interceptor
+
+### 요청에 대해 Header 또는 Parameter 등을 재작성할 수 있다.
+### 응답으로 온 chain 객체를 이용해 요청에 대해 공통적인 data를 달아줄 때 유용하고 Retrofit Api 인터페이스 정의 시 @Header Annotation을 달아줄 필요가 없어진다.
+###  return chain.proceed(finalRequest) : proceed()메서드로 서버에 통신하고 응답을 받아온다.
+
+## Retrofit Client
 ### Retrofit을 이용해 REST API에 네트워크 요청을 보내기위해 
 ### retrofitClient = Retrofit.Builder() : Retrofit.Builder 클래스를 사용해 인스턴스를 생성
 ### .addConverterFactory(GsonConverterFactory.create()) : json 응답을 parsing하여 객체로 변환하기 위한 컨버터
 ### .baseUrl(baseUrl) : 요청할 서버의 기본 URL을 지정
+### .client(client.build()) : Interceptor로 생성한 OkHttpClient를 요청에 사용할 수 있도록 해준다. 
 ### .build() : Retrofit 객체 생성
 
+<br>
 
+* IRetrofit_Service.kt
+~~~kotlin
+class RetrofitManager {
+    companion object {
+        val instance = RetrofitManager()
+        // 객체생성
+    }
 
+    // http call 생성
+    // 레트로핏 인터페이스 가져오기
+    private val iretrofitService : IRetrofit_Service? = RetrofitClient.getClient(API.BASE_URL)?.create(IRetrofit_Service::class.java)
+
+    //사진검색 api 호출
+    fun searchPhotos(searchTerm: String?, completion: (RESPONSE_STATE, String) -> Unit){
+        val term = searchTerm.let { it } ?: ""
+        val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
+
+        call.enqueue(object : retrofit2.Callback<JsonElement> {
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                Log.d(Constants.TAG, "RetrofitManager - onResponse() called : response.raw(): ${response.raw()}")
+                Log.d(Constants.TAG, "RetrofitManager - onResponse() called : response.body(): ${response.body()}")
+
+                completion(RESPONSE_STATE.OK, response.raw().toString())
+            }
+
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.d(Constants.TAG, "RetrofitManager - onFailure() called : t: $t")
+
+                completion(RESPONSE_STATE.FAIL, t.toString())
+            }
+
+        })
+    }
+ }
+~~~
+
+## Network Request
+
+### enqueue() : 비동기 Request를 보내고 Response가 돌아오면 콜백으로 앱에게 알려준다. 네트워크에 대한 작업은 비동기로 작업하도록 Background 스레드에서 처리해야 합니다.
+### onResponse(), onFailure() 콜백 메소드를 구현해야합니다. 수행한 Request에 대한 Response를 전달받아 처리할 수 있습니다.
+
+## High-Order-Function
+
+###  일반적으로 함수는 매개변수와 반환값이 데이터지만, 고차함수는 매개변수로 함수를 전달받거나, 함수를 반환하는 함수를 말합니다.
+<https://androidtest.tistory.com/116>
+<https://taehyungk.github.io/posts/android-kotlin-high-order-function/>
 
 
 

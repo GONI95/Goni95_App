@@ -1,7 +1,7 @@
 # Goni95_App
 # 사용 기술
 * [1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
-* [2. Retrofit](#retrofit-config)
+* [2. retrofit-config](#retrofit-config)
 * 
 
 
@@ -88,7 +88,7 @@
 ~~~
 
 
-
+<br><br><br>
 # 01_ui
 ## Kotlin-Extension-Functions 
 

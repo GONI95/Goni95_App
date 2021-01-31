@@ -1,15 +1,15 @@
 # Goni95_App
-### 사용 기술
+## 사용 기술
 * [2-1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
 * 
 * 
-### 특징
+## 특징
 * [1-1. Material NoActionBar](#Material-NoActionBar)
 * [2-2. Material Theme Handle](#Material-Theme-Handle)
 
 ------------
 
-### git과 안드로이드 프로젝트 연결
+## git과 안드로이드 프로젝트 연결
 <pre>
 - GitBash 처음 사용할 경우 : git config --global user.name "Your Name Here" 
                             git config --global user.email "your_email@youremail.com"
@@ -48,8 +48,8 @@
                       git pull 로컬저장소명 마스터브런치명                
 </pre>
 
-### 1. test
-#### 1-1. Material NoActionBar 
+#  test
+## 1-1. Material NoActionBar 
 ## Material-NoActionBar
 * themes.xml 
 ~~~xml
@@ -80,8 +80,8 @@
         android:theme="@style/Theme.MyApp">
 ~~~
 
-### 2. 01_ui
-#### 2-1. Kotlin Extension Functions 
+# 2. 01_ui
+## 2-1. Kotlin Extension Functions 
 ## Kotlin-Extension-Functions
 * Extensions.kt
 ~~~kotlin
@@ -125,7 +125,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
-#### 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
+## 2-2. Material Theme Handle(RaidoButton, TextInputLayout, TextInputEditText )
 ## Material-Theme-Handle
 * activity_home
 ~~~xml
@@ -189,4 +189,28 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
                 android:maxLength="15" />
 
         </com.google.android.material.textfield.TextInputLayout>
+~~~
+
+# 3. 03_ui
+## 2-1. Kotlin Extension Functions 
+## Kotlin-Extension-Functions
+* Extensions.kt
+~~~kotlin
+fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
+    this.addTextChangedListener(object : TextWatcher {
+      
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // 's' 문자열에서 "start" 위치로 부터 "count" 길이만큼 "after"로 변경될 예정임을 알림
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // 's'가 start 위치로 부터 count 길이만큼 변경되었다는 것을 알려준다. 이전 문자열에서 before 길이만큼 변경되었다는 것을 알린다.
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+            // 's' 내의 어떤 문자열이 변경되었다는 것을 알려준다.
+            completion(editable)
+        }
+    })
+}
 ~~~

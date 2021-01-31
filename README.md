@@ -52,8 +52,8 @@
 
 
 
-## + test
-### 1-1. Material-NoActionBar 
+# * test
+## 1-1. Material-NoActionBar 
 
 * themes.xml 
 ~~~xml
@@ -87,9 +87,8 @@
 
 
 
-## + 01_ui
-### 2-1. Kotlin Extension Functions 
-## Kotlin-Extension-Functions
+# * 01_ui
+## 2-1. Kotlin-Extension-Functions 
 
 * Extensions.kt
 ~~~kotlin

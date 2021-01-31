@@ -94,6 +94,8 @@
 # Branch : 01_ui
 ## Kotlin-Extension-Functions 
 
+<br>
+
 * Extensions.kt
 ~~~kotlin
 fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
@@ -115,6 +117,7 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 ~~~
 
+<br>
 
 * HomeActivity.kt
 ~~~kotlin

@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:hint="@string/Photo_search"
-            app:boxStrokeColor="@color/design_default_color_primary"
+            app:boxStrokeColor="@color/purple_500"
             app:counterEnabled="true"
             app:counterMaxLength="15"
             app:endIconMode="clear_text"

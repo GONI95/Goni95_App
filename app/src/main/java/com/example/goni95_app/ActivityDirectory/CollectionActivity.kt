@@ -38,6 +38,8 @@ class CollectionActivity : AppCompatActivity() {
         Log.d(Constants.TAG, "CollectionActivity - getBundleExtra / searchTerm : $searchTerm")
         Log.d(Constants.TAG, "CollectionActivity - getSerializable / arraysize : ${photoList.count()}")
 
+        binding.topAppBar.title = searchTerm
+
         photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
 
         photoGridRecyclerViewAdapter.submitList(photoList)  //생성자로 받는다면 필요없음

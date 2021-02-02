@@ -479,7 +479,7 @@ class App : Application() {
 
 <br><br>
 
-## Application-Class
+## Data-Parsing
 ~~~kotlin
  when (response.code()) {  // 응답 코드 구분
                     200 -> {

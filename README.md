@@ -1,9 +1,10 @@
 # Goni95_App
 # 사용 기술
 * [1. Kotlin Extension Functions](#Kotlin-Extension-Functions)
-* [2. retrofit](#retrofit-config)
+* [2. retrofit + Gson](#retrofit-config)
 * [3. OkHttp HttpLoggingInterceptor, Interceptor](#OkHttp-HttpLoggingInterceptor)
 * [4. High Order Function](#High-Order-Function)
+* [5. Application Class Handle](#Application-Class)
 
 <br><br><br>
 # 특징
@@ -450,7 +451,88 @@ class RetrofitManager {
 <https://taehyungk.github.io/posts/android-kotlin-high-order-function/>
 
 
+<br><br><br><br><br>
+# Branch : 03_grid_recyclerview
+## Application-Class
 
+<br>
 
+* App.kt
+~~~kotlin
+class App : Application() {
+    companion object{
+        // 싱글턴 패턴
+        lateinit var instance: App
+            private set
+        // 자기자신을 가져온다.
+    }
 
+    //onCreate()
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
+}
+~~~
 
+#### 어플리케이션 컴포넌트들 사이에서 공동으로 멤버들을 사용할 수 있게 해주는 편리한 공유 클래스로, 컴포넌트들이 공통되게 사용할 목적으로 하는 것을 작성하면, 해당 내용을 어디서든 접근이 가능하게 되고, class를 AndroidManifest.xml에 상속받아 만든 class를 추가하면 됩니다. (예: context)
+
+<br><br>
+
+## Data-Parsing
+~~~kotlin
+ when (response.code()) {  // 응답 코드 구분
+                    200 -> {
+                        // 파싱 작업
+                        response.body()?.let {
+                            var parsedPhotoDataArray = ArrayList<Photo>()
+
+                            // 최상위 JsonObject (total{}, results[])
+                            val body = it.asJsonObject  // Json 객체
+                            val results = body.getAsJsonArray("results") // result라는 Json Array
+                            val total = body.get("total").asInt // 검색 결과 수
+
+                            Log.d(
+                                Constants.TAG,
+                                "RetrofitManager - onResponse() called / total : ${total}"
+                            )
+
+                            // JsonArray result[] 내부의 JsonObject를 하나씩 받아 반복 수행
+                            results.forEach { resultItem ->
+                                val resultItemObject = resultItem.asJsonObject // get object
+                                val user =
+                                    resultItemObject.get("user").asJsonObject    // object -> user
+                                val username = user.get("username").asString    // user -> username
+                                val likeCount =
+                                    resultItemObject.get("likes").asInt     // object -> likes
+                                val thumbnail =
+                                    resultItemObject.get("urls").asJsonObject.get("thumb").asString      // urls -> thumb
+                                val createdAt =
+                                    resultItemObject.get("created_at").asString  // object -> create_at
+
+                                val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                // 실제 Date 형태
+                                val formatter = SimpleDateFormat("yyyy년\nMM월 dd일")
+                                // 변경하려는 Date 형태
+
+                                val outputDateString = formatter.format(parser.parse(createdAt))
+                                // Date를 원하는 형태로 치환
+
+                                //Log.d(Constants.TAG, "RetrofitManager - onResponse() called / outputDateString : ${outputDateString}")
+
+                                val photoItem = Photo(
+                                    author = username,
+                                    likesCount = likeCount,
+                                    thumbnail = thumbnail,
+                                    createdAt = outputDateString
+                                )
+
+                                parsedPhotoDataArray.add(photoItem)
+                                //ArrayList에 Photo 타입의 데이터를 추가가
+                            }
+                            completion(RESPONSE_STATE.OK, parsedPhotoDataArray)
+                        }
+                    }
+                }
+~~~
+#### 비동기 콜백 메서드로 들어오는 Response를 parsing하는 작업

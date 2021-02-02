@@ -63,4 +63,5 @@ dependencies {
     // 1. 기본매개변수, 로깅확인(헤더,바디를 로그로 볼 수 있음),
     def interceptor_version = "4.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
+
 }

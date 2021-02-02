@@ -1,6 +1,7 @@
 package com.example.goni95_app.ActivityDirectory
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -15,7 +16,7 @@ import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
 
-
+// 직렬화 : https://altongmon.tistory.com/814
 class HomeActivity : AppCompatActivity() {
 
     private var currentSearchType: SEARCH_TYPE = SEARCH_TYPE.PHOTO
@@ -83,15 +84,29 @@ class HomeActivity : AppCompatActivity() {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
             //검색 api 호출
-            RetrofitManager.instance.searchPhotos(searchTerm = binding.searchEditText.text.toString(), completion = {
-                response_state, response_body ->
+            val userSearchInput = binding.searchEditText.text.toString()
+            RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
+                    response_state, responsePhotoArrayList ->
 
                 when(response_state){
                     RESPONSE_STATE.OK -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${response_body?.size}")
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
+
+                        val intent = Intent(this, CollectionActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putSerializable("photo_array_list", responsePhotoArrayList)
+                        //bundle은 Parcelable 객체를 상속받아 구현된 직렬화 class로, bundle 객체는 내부적으로 HashMap을 사용하며,
+                        // Parcelable로 구현되어 있어 간단한 데이터 전달에 유용하다.
+                        // putSerializable()을 이용하면 객체가 Serialzable을 상속받고 있다면 객체를 보낼 수 있다.
+                        // 직렬화 : 객체를 바이트 스트림으로 바꾸어, 객체에 저장된 데이터를 스트림에 쓰기위해 연속적인 serial 데이터로 변환
+                        intent.putExtra("array_bundle", bundle)
+                        //intent.putExtra()로 해당 번들을 넣는다.
+                        intent.putExtra("searchTerm", userSearchInput)
+                        // 사용자가 입력한 입력값
+                        startActivity(intent)
                     }
                     RESPONSE_STATE.FAIL -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${response_body}")
+                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")
                     }
                 }
             })

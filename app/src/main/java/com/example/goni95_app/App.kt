@@ -2,7 +2,7 @@ package com.example.goni95_app
 
 import android.app.Application
 
-// 매니패스트 파일에 android:name을 해당 class 설정
+// 매니패스트 파일에 android:name을 해당 class 설정 : https://uroa.tistory.com/43
 class App : Application() {
     companion object{
         // 싱글턴 패턴

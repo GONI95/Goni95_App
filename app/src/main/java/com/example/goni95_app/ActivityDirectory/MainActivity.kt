@@ -7,6 +7,7 @@ import com.example.goni95_app.R
 
 //https://www.youtube.com/watch?v=cKvemtEP-Vw&list=PLgOlaPUIbynrDSTJxS8AaE-2zYvPCjWtF&index=22
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

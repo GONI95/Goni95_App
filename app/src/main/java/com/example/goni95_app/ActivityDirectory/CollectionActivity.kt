@@ -26,5 +26,7 @@ class CollectionActivity : AppCompatActivity() {
 
         Log.d(Constants.TAG, "CollectionActivity - getBundleExtra / searchTerm : $searchTerm")
         Log.d(Constants.TAG, "CollectionActivity - getSerializable / arraysize : ${photoList.count()}")
+
+
     }
 }

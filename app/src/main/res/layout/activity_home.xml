@@ -41,6 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
+                android:textSize="14sp"
+                android:theme="@style/MyRadioButton"
                 android:text="@string/Photo_search" />
 
             <!-- 메테리얼 사용자검색 라디오버튼 -->
@@ -49,7 +51,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:textSize="14sp"
                 android:checked="false"
+                android:theme="@style/MyRadioButton"
                 android:text="@string/User_search" />
         </RadioGroup>
 

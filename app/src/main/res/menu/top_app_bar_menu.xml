@@ -3,18 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/search_menu_item"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         android:contentDescription="@string/content_description_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+    <!-- ifRoom : 공간이 더 있다면(ifRoom)의 액션으로 표시, 공간이 없다면 오버플로우 메뉴에 표시.
+         collapseActionView : 아이템에 커스텀 액션 뷰가 지정된 경우, 축소된 형태로 표시
+         actionViewClass : 액션을 구현한 위젯 class
+    -->
 
     <item
-        android:id="@+id/more"
+        android:id="@+id/more_menu_item"
         android:icon="@drawable/ic_more_vert"
         android:title="@string/more"
         android:contentDescription="@string/content_description_more"
         app:showAsAction="ifRoom" />
-    <!-- ifRoom : 공간이 더 있다면 위의 글을 출력시킨다. -->
+
 
 </menu>

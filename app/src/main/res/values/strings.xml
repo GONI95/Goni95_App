@@ -16,6 +16,6 @@
     <string name="more">더보기</string>
     <string name="content_description_search">사진을 검색합니다.</string>
     <string name="content_description_more">더보기 메뉴입니다.</string>
-
-
+    <string name="search_history_save">검색어 저장</string>
+    <string name="search_history_clear">전체 삭제</string>
 </resources>

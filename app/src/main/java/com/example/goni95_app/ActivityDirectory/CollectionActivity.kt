@@ -65,6 +65,7 @@ class CollectionActivity : AppCompatActivity(),
 
         binding.topAppBar.title = searchTerm
         setSupportActionBar(binding.topAppBar)
+        // ToolBar를 Activity의 App Bar로 사용할 수 있다.
 
         photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
 
@@ -124,7 +125,8 @@ class CollectionActivity : AppCompatActivity(),
 
         return true
     }
-    // 서치뷰 검색어 입력 이벤트
+
+    // 1. 서치뷰 검색 이벤트
     override fun onQueryTextSubmit(query: String?): Boolean {
         // 키보드에서 돋보기를 클릭 시 호출되며, 입력된 text를 받음
         Log.d(Constants.TAG, "CollectionActivity - 검색 버튼이 클릭, quary : $query")
@@ -140,7 +142,8 @@ class CollectionActivity : AppCompatActivity(),
 
         return true
     }
-    // 서치뷰 검색어 입력 이벤트
+
+    // 2. 서치뷰 입력 이벤트
     override fun onQueryTextChange(newText: String?): Boolean {
         // text 입력 시 호출되며, 입력된 text를 받음
         Log.d(Constants.TAG, "CollectionActivity - 검색 값이 변경, newText : $newText")
@@ -154,7 +157,7 @@ class CollectionActivity : AppCompatActivity(),
         return true
     }
 
-    // Search_History_Save_Mode
+    // 3. Search_History_Save_Mode
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         when(buttonView){
             binding.searchHistorySaveMode ->
@@ -166,7 +169,7 @@ class CollectionActivity : AppCompatActivity(),
         }
     }
 
-    //
+    // 4. Search_History_Clear
     override fun onClick(v: View?) {
         when(v){
             binding.searchHistoryClear -> 

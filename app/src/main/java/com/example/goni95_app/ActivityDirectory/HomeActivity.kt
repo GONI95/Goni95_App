@@ -87,6 +87,7 @@ class HomeActivity : AppCompatActivity() {
             val userSearchInput = binding.searchEditText.text.toString()
             RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
                     response_state, responsePhotoArrayList ->
+                // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
 
                 when(response_state){
                     RESPONSE_STATE.OK -> {
@@ -102,7 +103,7 @@ class HomeActivity : AppCompatActivity() {
                         intent.putExtra("array_bundle", bundle)
                         //intent.putExtra()로 해당 번들을 넣는다.
                         intent.putExtra("searchTerm", userSearchInput)
-                        // 사용자가 입력한 입력값
+                        // 사용자가 입력한 입력값(AppBar의 Title로 사용)
                         startActivity(intent)
                     }
                     RESPONSE_STATE.FAIL -> {

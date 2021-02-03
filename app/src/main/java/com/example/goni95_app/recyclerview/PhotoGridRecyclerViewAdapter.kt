@@ -19,7 +19,6 @@ class PhotoGridRecyclerViewAdapter : RecyclerView.Adapter<PhotoItemViewHolder>()
     // 뷰가 묶였을때 데이터를 뷰홀더에 넘겨준다
     override fun onBindViewHolder(holder: PhotoItemViewHolder, position: Int) {
         holder.bindWithView(this.photoList[position])   // 아이템을 통해 뷰와 데이터가 연결되는 작업
-
     }
 
     // 보여줄 목록의 갯수

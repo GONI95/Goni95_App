@@ -10,6 +10,7 @@
 # 특징
 * [1. Material NoActionBar](#Material-NoActionBar)
 * [2. Material Theme Handle](#Material-Theme-Handle)
+* [3. Grid RecyclerView](#Grid-RecyclerView)
 
 
 ------------
@@ -536,3 +537,159 @@ class App : Application() {
                 }
 ~~~
 #### 비동기 콜백 메서드로 들어오는 Response를 parsing하는 작업
+
+
+<br><br><br><br><br>
+# Branch : 03_grid_recyclerview
+## Intent, Bundle을  데이터 전달
+
+<br>
+
+* HomeActivity.kt
+~~~kotlin
+// SEARCH 버튼 이벤트
+        binding.include.searchButton.setOnClickListener {
+            Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
+
+            //검색 api 호출
+            val userSearchInput = binding.searchEditText.text.toString()
+            RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
+                    response_state, responsePhotoArrayList ->
+                    // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
+
+                when(response_state){
+                    RESPONSE_STATE.OK -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
+
+                        val intent = Intent(this, CollectionActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putSerializable("photo_array_list", responsePhotoArrayList)
+                        
+                        intent.putExtra("array_bundle", bundle)
+                        //intent.putExtra()로 해당 번들을 넣는다.
+                        intent.putExtra("searchTerm", userSearchInput)
+                        // 사용자가 입력한 입력값(AppBar의 Title로 사용)
+                        startActivity(intent)
+                    }
+                    RESPONSE_STATE.FAIL -> {
+                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")
+                    }
+                }
+            })
+
+            handleSearchButton()
+        }
+~~~
+
+<br>
+
+* Photo.kt
+~~~kotlin
+data class Photo(var thumbnail: String?, var author: String?, var createdAt: String?, var likesCount: Int?) :Serializable
+~~~
+<https://www.crocus.co.kr/1560>
+#### response_state의 값이 OK인 경우 Intent를 이용해 CollectionActivity.kt로 이동
+#### Intent를 이용해 Activity를 전환하는 과정에서 Unsplash API로 받아 Parsing한 data를 Bundle을 이용하여 직렬화하여 전달했다.
+#### 직렬화 : 객체를 바이트 스트림으로 바꾸어, 객체에 저장된 데이터를 스트림에 쓰기위해 연속적인 serial 데이터로 변환하는 작업
+#### Bundle : 여러가지의 타입의 값을 저장하는 Map class이고, Parcelable 객체를 상속받아 구현된 직렬화 class이다. Parcelable로 구현되어 있어 간단한 데이터 전달에 유용하다. 객체가 Serialzable을 상속받고 있다면 putSerializable() 메서드를 이용하여 객체를 보낼 수 있다.
+
+<br>
+
+CollectionActivity.kt
+~~~kotlin
+ val bundle = intent.getBundleExtra("array_bundle")
+        val searchTerm = intent.getStringExtra("searchTerm")
+        // intent로 보낸 bundle을 받기
+
+        photoList = bundle?.getSerializable("photo_array_list") as ArrayList<Photo>
+        // 받은 bundle에서 직렬화하여 보낸 Photo타입의 리스트를 받기
+~~~
+#### 직렬화하여 전달된 데이터를 받는다.
+
+
+<br>
+
+CollectionActivity.kt
+~~~kotlin
+ val bundle = intent.getBundleExtra("array_bundle")
+        val searchTerm = intent.getStringExtra("searchTerm")
+        // intent로 보낸 bundle을 받기
+
+        photoList = bundle?.getSerializable("photo_array_list") as ArrayList<Photo>
+        // 받은 bundle에서 직렬화하여 보낸 Photo타입의 리스트를 받기
+~~~
+#### 직렬화하여 전달된 데이터를 받는다.
+
+
+<br>
+
+## Grid-RecyclerView
+
+<br>
+
+1. RecyclerView의 각 Item으로 사용될 layout_photoitem.xml을 정의
+2. Adapter, ViewHolder 정의
+
+<br>
+
+PhotoGridRecyclerViewAdapter.kt
+~~~kotlin
+class PhotoGridRecyclerViewAdapter : RecyclerView.Adapter<PhotoItemViewHolder>() {
+    private var photoList = ArrayList<Photo>()
+
+    // 뷰홀더와 레이아웃 연결
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoItemViewHolder {
+        return PhotoItemViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_photoitem, parent, false)) // layout, viewGroup, ?
+    }
+    
+    // 뷰가 묶였을때 데이터를 뷰홀더에 넘겨준다
+    override fun onBindViewHolder(holder: PhotoItemViewHolder, position: Int) {
+        holder.bindWithView(this.photoList[position])   // 아이템을 통해 뷰와 데이터가 연결되는 작업
+
+    }
+
+    // 보여줄 목록의 갯수
+    override fun getItemCount(): Int {
+        return this.photoList.size
+    }
+
+    // 외부에서 어답터에 데이터 배열을 넣어준다.
+    fun submitList(photoList: ArrayList<Photo>){
+        this.photoList = photoList
+    }
+}
+~~~
+
+<br>
+
+PhotoItemViewHolder.kt
+~~~kotlin
+class PhotoItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    //포토아이템뷰홀더가 생성될 때 itemVIew를 생성자로 받아 상속받는 ViewHolder에 필요한 view를 넣어준다.
+
+    private var binding: LayoutPhotoitemBinding = LayoutPhotoitemBinding.bind(itemView.rootView)
+
+    //뷰를 가져온다
+    private val photoImage = binding.ivPhoto
+    private val photocreatedAt = binding.tvCreatedAt
+    private val photolikesCount = binding.tvLikesCount
+
+    // 데이터와 뷰를 묶음
+    fun bindWithView(photoItem: Photo){
+        Log.d(Constants.TAG, "PhotoItemViewHolder - bindWithView() called")
+
+        photocreatedAt.text = photoItem.createdAt
+        photolikesCount.text = photoItem.likesCount.toString()
+
+        // https://github.com/bumptech/glide
+        Glide.with(App.instance)    // context
+            .load(photoItem.thumbnail)  // 출력시킬 사진
+            .placeholder(R.drawable.ic_photo) // 작동되지 않을 시 기본값 설정
+            .into(photoImage)   // View
+    }
+}
+~~~
+
+
+

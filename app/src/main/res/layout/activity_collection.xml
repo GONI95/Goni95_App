@@ -22,7 +22,11 @@
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/ic_menu"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:layout_scrollFlags="scroll|enterAlways"
             />
+        <!-- scroll : 이 뷰가 화면에서 사라질 수 있음을 나타낸다. scroll이 정의되지 않으면 뷰는 사라지지 않는다.
+             enterAlways : scroll 옵션과 함께 사용될 시 위쪽으로 스크롤할 경우 사라지고, 아래쪽으로 스크롤할 경우 표시된다.
+         -->
 
     </com.google.android.material.appbar.AppBarLayout>
 

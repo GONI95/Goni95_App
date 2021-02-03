@@ -14,8 +14,9 @@ enum class SEARCH_TYPE{
 }
 
 enum class RESPONSE_STATE {
-    OK,
-    FAIL
+    OK, // 정상적인 응답, 검색결과 있음
+    FAIL,   // 응답 오류
+    NONE    // 정상적인 응답, 검색결과 없음
 }
 
 object API {

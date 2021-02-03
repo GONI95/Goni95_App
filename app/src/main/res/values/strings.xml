@@ -6,6 +6,7 @@
     <string name="User_search">사용자검색</string>
     <string name="Enter_search_word">검색어를 입력하시오.</string>
     <string name="String_length_limit">검색어 제한 : 15자</string>
+    <string name="No_search_results">검색 결과가 없습니다. </string>
 
     <!-- customlayout_button -->
     <string name="search">SEARCH</string>

@@ -56,40 +56,46 @@ class RetrofitManager {
                                 "RetrofitManager - onResponse() called / total : ${total}"
                             )
 
-                            // JsonArray result[] 내부의 JsonObject를 하나씩 받아 반복 수행
-                            results.forEach { resultItem ->
-                                val resultItemObject = resultItem.asJsonObject // get object
-                                val user =
-                                    resultItemObject.get("user").asJsonObject    // object -> user
-                                val username = user.get("username").asString    // user -> username
-                                val likeCount =
-                                    resultItemObject.get("likes").asInt     // object -> likes
-                                val thumbnail =
-                                    resultItemObject.get("urls").asJsonObject.get("thumb").asString      // urls -> thumb
-                                val createdAt =
-                                    resultItemObject.get("created_at").asString  // object -> create_at
+                            //검색 결과 수가 0이 아닌 경우
+                            if(total != 0){
+                                // JsonArray result[] 내부의 JsonObject를 하나씩 받아 반복 수행
+                                results.forEach { resultItem ->
+                                    val resultItemObject = resultItem.asJsonObject // get object
+                                    val user =
+                                        resultItemObject.get("user").asJsonObject    // object -> user
+                                    val username = user.get("username").asString    // user -> username
+                                    val likeCount =
+                                        resultItemObject.get("likes").asInt     // object -> likes
+                                    val thumbnail =
+                                        resultItemObject.get("urls").asJsonObject.get("thumb").asString      // urls -> thumb
+                                    val createdAt =
+                                        resultItemObject.get("created_at").asString  // object -> create_at
 
-                                val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                                // 실제 Date 형태
-                                val formatter = SimpleDateFormat("yyyy년\nMM월 dd일")
-                                // 변경하려는 Date 형태
+                                    val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                                    // 실제 Date 형태
+                                    val formatter = SimpleDateFormat("yyyy년\nMM월 dd일")
+                                    // 변경하려는 Date 형태
 
-                                val outputDateString = formatter.format(parser.parse(createdAt))
-                                // Date를 원하는 형태로 치환
+                                    val outputDateString = formatter.format(parser.parse(createdAt))
+                                    // Date를 원하는 형태로 치환
 
-                                //Log.d(Constants.TAG, "RetrofitManager - onResponse() called / outputDateString : ${outputDateString}")
+                                    //Log.d(Constants.TAG, "RetrofitManager - onResponse() called / outputDateString : ${outputDateString}")
 
-                                val photoItem = Photo(
-                                    author = username,
-                                    likesCount = likeCount,
-                                    thumbnail = thumbnail,
-                                    createdAt = outputDateString
-                                )
+                                    val photoItem = Photo(
+                                        author = username,
+                                        likesCount = likeCount,
+                                        thumbnail = thumbnail,
+                                        createdAt = outputDateString
+                                    )
 
-                                parsedPhotoDataArray.add(photoItem)
-                                //ArrayList에 Photo 타입의 데이터를 추가가
+                                    parsedPhotoDataArray.add(photoItem)
+                                    //ArrayList에 Photo 타입의 데이터를 추가가
+                                }
+                                completion(RESPONSE_STATE.OK, parsedPhotoDataArray)
+                            } else{
+                                //검색 결과 수가 0인 경우
+                                completion(RESPONSE_STATE.NONE, null)
                             }
-                            completion(RESPONSE_STATE.OK, parsedPhotoDataArray)
                         }
                     }
                 }

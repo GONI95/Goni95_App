@@ -16,7 +16,7 @@ import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
 
-// 직렬화 : https://altongmon.tistory.com/814
+// Bundle : https://www.crocus.co.kr/1560
 class HomeActivity : AppCompatActivity() {
 
     private var currentSearchType: SEARCH_TYPE = SEARCH_TYPE.PHOTO
@@ -83,6 +83,8 @@ class HomeActivity : AppCompatActivity() {
         binding.include.searchButton.setOnClickListener {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
+            handleSearchButton()    // 프로그래스바 활성화
+            
             //검색 api 호출
             val userSearchInput = binding.searchEditText.text.toString()
             RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
@@ -109,21 +111,26 @@ class HomeActivity : AppCompatActivity() {
                     RESPONSE_STATE.FAIL -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")
                     }
+                    RESPONSE_STATE.NONE -> {
+                        Toast.makeText(this, getString(R.string.No_search_results), Toast.LENGTH_SHORT).show()
+                        binding.searchEditText.setText("")
+                        //검색 결과가 없을 때만 검색창 초기화
+                    }
                 }
-            })
 
-            handleSearchButton()
+                handleSearchButton()
+                // 프로그래스바 비활성화
+            })
         }
     }// onCreate
 
     private fun handleSearchButton(){
-        binding.include.btnProgress.visibility = View.VISIBLE
-        binding.include.searchButton.text = ""
-
-        Handler().postDelayed({
+        if(binding.include.btnProgress.visibility == View.INVISIBLE){
+            binding.include.btnProgress.visibility = View.VISIBLE
+            binding.include.searchButton.text = ""
+        }else{
             binding.include.btnProgress.visibility = View.INVISIBLE
             binding.include.searchButton.text = getString(R.string.search)
-        }, 1500)
-
+        }
     }
 }

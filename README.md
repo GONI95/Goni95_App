@@ -595,7 +595,7 @@ data class Photo(var thumbnail: String?, var author: String?, var createdAt: Str
 
 <br>
 
-CollectionActivity.kt
+* CollectionActivity.kt
 ~~~kotlin
  val bundle = intent.getBundleExtra("array_bundle")
         val searchTerm = intent.getStringExtra("searchTerm")
@@ -605,21 +605,6 @@ CollectionActivity.kt
         // 받은 bundle에서 직렬화하여 보낸 Photo타입의 리스트를 받기
 ~~~
 #### 직렬화하여 전달된 데이터를 받는다.
-
-
-<br>
-
-CollectionActivity.kt
-~~~kotlin
- val bundle = intent.getBundleExtra("array_bundle")
-        val searchTerm = intent.getStringExtra("searchTerm")
-        // intent로 보낸 bundle을 받기
-
-        photoList = bundle?.getSerializable("photo_array_list") as ArrayList<Photo>
-        // 받은 bundle에서 직렬화하여 보낸 Photo타입의 리스트를 받기
-~~~
-#### 직렬화하여 전달된 데이터를 받는다.
-
 
 <br>
 
@@ -632,7 +617,7 @@ CollectionActivity.kt
 
 <br>
 
-PhotoGridRecyclerViewAdapter.kt
+* PhotoGridRecyclerViewAdapter.kt
 ~~~kotlin
 class PhotoGridRecyclerViewAdapter : RecyclerView.Adapter<PhotoItemViewHolder>() {
     private var photoList = ArrayList<Photo>()
@@ -663,7 +648,7 @@ class PhotoGridRecyclerViewAdapter : RecyclerView.Adapter<PhotoItemViewHolder>()
 
 <br>
 
-PhotoItemViewHolder.kt
+* PhotoItemViewHolder.kt
 ~~~kotlin
 class PhotoItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
     //포토아이템뷰홀더가 생성될 때 itemVIew를 생성자로 받아 상속받는 ViewHolder에 필요한 view를 넣어준다.

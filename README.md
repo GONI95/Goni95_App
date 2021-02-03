@@ -676,5 +676,258 @@ class PhotoItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 }
 ~~~
 
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+       photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
+
+        photoGridRecyclerViewAdapter.submitList(photoList)  //생성자로 받는다면 필요없음
+
+        binding.collectionRecyclerview.layoutManager =
+            GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        // context, 가로 item 수, 출력 방향, item의 첫, 끝 중 시작 위치
+        binding.collectionRecyclerview.adapter = photoGridRecyclerViewAdapter
+~~~
+
+<br>
+
+activity_collection.xml
+~~~xml
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liftOnScroll="true"
+        app:liftOnScrollTargetViewId="@id/collection_recyclerview">
+        <!-- recyclerview를 스크롤 시 appbar를 lift -->
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/page_title"
+            app:menu="@menu/top_app_bar_menu"
+            app:navigationIcon="@drawable/ic_menu"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            />
+        <!-- scroll : 이 뷰가 화면에서 사라질 수 있음을 나타낸다. scroll이 정의되지 않으면 뷰는 사라지지 않는다.
+             enterAlways : scroll 옵션과 함께 사용될 시 위쪽으로 스크롤할 경우 사라지고, 아래쪽으로 스크롤할 경우 표시된다.
+         -->
+
+    </com.google.android.material.appbar.AppBarLayout>
+~~~
+#### RecyclerView를 아래로 scroll할 경우 AppBar가 lift 되도록 xml 속성을 설정 
+
+<br><br><br><br><br>
+# Branch : 04_appbar_search_ui
+## 
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+class CollectionActivity : AppCompatActivity(),
+    androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+//서비뷰, 서치뷰 에디트
+    private lateinit var mSearchView: androidx.appcompat.widget.SearchView
+    private lateinit var mSearchViewEditText: EditText
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+      ...
+      setSupportActionBar(binding.topAppBar)
+      // ToolBar를 Activity의 App Bar로 사용할 수 있다.
+    }
+    
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // 매뉴를 생성
+
+        Log.d(Constants.TAG, "CollectionActivity - onCreateOptionMenu() called")
+        val inflater = menuInflater
+        inflater.inflate(R.menu.top_app_bar_menu, menu)
+        // 매뉴인플레이터로 매뉴xml과 매개변수로 들어오는 매뉴와 연결
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        // System으로 부터 SearchManager를 가져옴
+
+        this.mSearchView = menu?.findItem(R.id.search_menu_item)?.actionView as androidx.appcompat.widget.SearchView
+
+        this.mSearchView.apply {
+            this.queryHint = "검색어를 입력해주세요"
+
+            this.setOnQueryTextListener(this@CollectionActivity)
+            // 위에서 정의한 구현할 setOnQueryTextListener와 현재 setOnQueryTextListener를 연결
+
+            this.setOnQueryTextFocusChangeListener { _, hasFocus ->
+                //hasFocus : SearchView의 활성화, 비활성화 상태를 가져오는 리스너
+                when(hasFocus){
+                    // Linear_Search_History 활성화 유무를 변경
+                    true -> {
+                        Log.d(Constants.TAG, "CollectionActivity - 서치뷰 활성화")
+                        binding.linearSearchHistory.visibility = View.VISIBLE
+                    }
+                    false -> {
+                        Log.d(Constants.TAG, "CollectionActivity - 서치뷰 비활성화")
+                        binding.linearSearchHistory.visibility = View.INVISIBLE
+                    }
+                }
+            }
+
+            // SearchView의 EditText를 가져온다.
+            mSearchViewEditText = this.findViewById(androidx.appcompat.R.id.search_src_text)
+        }
+        
+        // SearchView의 EditText에 길이 제한, 컬러를 수정
+        mSearchViewEditText.apply {
+            this.filters = arrayOf(InputFilter.LengthFilter(15))
+            this.setTextColor(Color.WHITE)
+            this.setHintTextColor(Color.WHITE)
+        }
+
+        return true
+    }
+~~~
+#### AppBar의 돋보기 OptionMenu를 SearchView와 연결하여, hint, 검색어 길이 제한, SearchView 활성화 유무 등을 설정했다. 
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+class CollectionActivity : AppCompatActivity(),
+    androidx.appcompat.widget.SearchView.OnQueryTextListener,
+    CompoundButton.OnCheckedChangeListener,
+    View.OnClickListener{
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+      ...
+    }
+    
+    // 1. 서치뷰 검색 이벤트
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        // 키보드에서 돋보기를 클릭 시 호출되며, 입력된 text를 받음
+        Log.d(Constants.TAG, "CollectionActivity - 검색 버튼이 클릭, quary : $query")
+
+        // isNullOrEmpty() : null, ""인 경우 true
+        if (!query.isNullOrEmpty()) {
+            binding.topAppBar.title = query
+
+        }
+        //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
+        //this.mSearchView.clearFocus()     // 키보드가 내려간다
+        this.binding.topAppBar.collapseActionView()   // 액션뷰가 닫힌다.
+
+        return true
+    }
+    // 2. 서치뷰 입력 이벤트
+    override fun onQueryTextChange(newText: String?): Boolean {
+        // text 입력 시 호출되며, 입력된 text를 받음
+        Log.d(Constants.TAG, "CollectionActivity - 검색 값이 변경, newText : $newText")
+
+        val userInputText = newText.let { it } ?: ""
+
+        if (userInputText.count() == 15){
+            Toast.makeText(this, getString(R.string.String_length_limit), Toast.LENGTH_SHORT).show()
+        }
+
+        return true
+    }
+
+    // 3. Search_History_Save_Mode
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        when(buttonView){
+            binding.searchHistorySaveMode ->
+                if (isChecked == true){
+                    Log.d(Constants.TAG, "CollectionActivity - 검색어 저장기능 활성화")
+            } else {
+                    Log.d(Constants.TAG, "CollectionActivity - 검색어 저장기능 비활성화")
+            }
+        }
+    }
+
+    // 4. Search_History_Clear
+    override fun onClick(v: View?) {
+        when(v){
+            binding.searchHistoryClear -> 
+                Log.d(Constants.TAG, "CollectionActivity - 검색어 삭제 호출")
+        }
+    }
+
+}
+~~~
+#### 1. onQueryTextSubmit() : 키보드에서 완료 또는 돋보기 버튼이 클릭될 시 입력된 text를 받을 수 있는 메소드
+#### 설명 : 전달받은 text가 null 또는 ""가 아닌 경우 AppBar의 Title을 변경하고, SearchView를 닫는다.
+
+#### 2. onQueryTextChange() : SearchView의 EditText에 값이 입력될 때 마다 호출되어 EditText에 입력된 text를 전달받을 수 있는 메소드
+#### 설명 : 입력된 text의 문자 count()가 15를 넘지않도록 제한하고, Toast message 출력
+
+### 3, 4. : 각각 클릭된 상황에 맞게, 저장 기능 활성화 유무와 검색어 삭제 로그만 출력되도록 했다.
+<br>
+
+* activity_collection.xml
+~~~xml
+ <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/collection_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
+<LinearLayout
+        android:id="@+id/linear_search_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="invisible"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <!-- layout_behavior : App bar의 하단에 위치할 위젯을 추가하면 App bar와 연결됨 -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_history_save"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/search_history_save_mode"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/search_history_save_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:checked="false"
+                android:theme="@style/MySwitchButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/search_history_clear"
+                android:textColor="@color/gray"
+                android:text="@string/search_history_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableEnd="@drawable/ic_delete_sweep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+~~~
+#### Behavior과 CoordinatorLayout 관계 : <https://m.blog.naver.com/PostView.nhn?blogId=pistolcaffe&logNo=221016672922&proxyReferer=https:%2F%2Fwww.google.com%2F>
+#### SearchView가 활성화 유무에 따라 대응하는 두 Layout이 표시되도록 하기위해서 RecyclerView에 대응하는 LinearLayout을 정의하였다. 
+    

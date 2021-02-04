@@ -995,6 +995,7 @@ object SharedPreferenceManager {
 #### Gson 가이드 : <https://github.com/google/gson/blob/master/UserGuide.md>
 
 <br>
+
 * CollectionActivity.kt
 ~~~kotlin
 
@@ -1038,12 +1039,6 @@ object SharedPreferenceManager {
     }
 ~~~
 
-
-
-
-
 ## ISSUU
-
-<br>
 
 #### SharedPreference에 정의한 Model의 데이터를 저장하고 출력하기 위해서 Gson을 이용하여 컨버팅하는 작업이 쉽지 않았다. 

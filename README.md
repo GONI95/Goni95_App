@@ -997,6 +997,7 @@ object SharedPreferenceManager {
 <br>
 * CollectionActivity.kt
 ~~~kotlin
+
     //검색 기록 배열
     private var searchHisttoryList = ArrayList<SearchHistoryData>()
     
@@ -1036,3 +1037,13 @@ object SharedPreferenceManager {
         return true
     }
 ~~~
+
+
+
+
+
+## ISSUU
+
+<br>
+
+#### SharedPreference에 정의한 Model의 데이터를 저장하고 출력하기 위해서 Gson을 이용하여 컨버팅하는 작업이 쉽지 않았다. 

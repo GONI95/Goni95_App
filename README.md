@@ -5,13 +5,15 @@
 * [3. OkHttp HttpLoggingInterceptor, Interceptor](#OkHttp-HttpLoggingInterceptor)
 * [4. High Order Function](#High-Order-Function)
 * [5. Application Class Handle](#Application-Class)
+* [6. SharedPreference](#SharedPreference_config)
+
 
 <br><br><br>
 # 특징
 * [1. Material NoActionBar](#Material-NoActionBar)
 * [2. Material Theme Handle](#Material-Theme-Handle)
 * [3. Grid RecyclerView](#Grid-RecyclerView)
-
+* [4. SearchView](#SearchView_config)
 
 ------------
 
@@ -721,7 +723,7 @@ activity_collection.xml
 
 <br><br><br><br><br>
 # Branch : 04_appbar_search_ui
-## 
+## SearchView-config
 
 <br>
 
@@ -930,4 +932,107 @@ class CollectionActivity : AppCompatActivity(),
 ~~~
 #### Behavior과 CoordinatorLayout 관계 : <https://m.blog.naver.com/PostView.nhn?blogId=pistolcaffe&logNo=221016672922&proxyReferer=https:%2F%2Fwww.google.com%2F>
 #### SearchView가 활성화 유무에 따라 대응하는 두 Layout이 표시되도록 하기위해서 RecyclerView에 대응하는 LinearLayout을 정의하였다. 
+
+<br><br><br><br><br>
+# Branch : 05_sharedPreference
+## SharedPreference_config
+
+<br>
+
+* SharedPreferenceManager.kt
+~~~kotlin
+    // 메모리를 사용하고 그것을 계속 사용하기 위해 싱글턴
+object SharedPreferenceManager {
+    //SharedPreference의 KEY로 사용될 상수를 선언
+    private const val SHARED_SHEARCH_HISTORY = "shared_search_history"  // shared 이름 key
+    private const val KEY_SEARCH_HISTORY = "key_search_history" // shared에 저장될 data key
+
+    //검색 목록 저장(Gson - 컨버팅)
+    fun storeSearchHistory(searchHistoryList: MutableList<SearchHistoryData>){
+        Log.d(Constants.TAG, "SharedPreferenceManager - storeSearchHistory() called")
+
+        //매개변수로 들어온 배열 -> 문자열로 변환(toJson() : java -> json
+        // 객체의 인스턴스를 Json으로 직렬화 하는 것도 가능)
+        val searchHistoryString : String = Gson().toJson(searchHistoryList)
+        Log.d(Constants.TAG, "storeSearchHistory() - sHS : $searchHistoryString")
+
+        //sharedPreference 세팅
+        val shared =
+            App.instance.getSharedPreferences(SHARED_SHEARCH_HISTORY, Context.MODE_PRIVATE)
+
+        //sharedPreference editor 세팅
+        val editor = shared.edit()
+
+        editor.putString(KEY_SEARCH_HISTORY, searchHistoryString)
+        editor.apply()  // 변경사항 저장
+    }
+
+    // 검색 목록 가져오기
+    fun getSearchHistory() : MutableList<SearchHistoryData>{
+        Log.d(Constants.TAG, "SharedPreferenceManager - getSearchHistory() called")
+
+        val shared =
+            App.instance.getSharedPreferences(SHARED_SHEARCH_HISTORY, Context.MODE_PRIVATE)
+
+        //저장되어있던 data를 가져오기
+        val storeSearchHistoryString = shared.getString(KEY_SEARCH_HISTORY, "")!!
+
+        var storeSearchHistoryList = ArrayList<SearchHistoryData>()
+
+        if(storeSearchHistoryString.isNotEmpty()){
+            //저장된 문자열을 객체 배열로 변경
+            storeSearchHistoryList =
+                Gson().fromJson(storeSearchHistoryString, Array<SearchHistoryData>::class.java)
+                    .toMutableList() as ArrayList<SearchHistoryData>
+            // fromJson() : json -> java
+        }
+
+        //sharedPreference editor 세팅
+        return storeSearchHistoryList
+    }
+}
+~~~
+#### Gson 가이드 : <https://github.com/google/gson/blob/master/UserGuide.md>
+
+<br>
+* CollectionActivity.kt
+~~~kotlin
+    //검색 기록 배열
+    private var searchHisttoryList = ArrayList<SearchHistoryData>()
     
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+         //저장될 검색 기록 가져오기
+        this.searchHisttoryList = SharedPreferenceManager.getSearchHistory() as ArrayList<SearchHistoryData>
+
+        this.searchHisttoryList.forEach {
+            Log.d(Constants.TAG, "저장된 검색 기록 - it : ${it.timeSet} ${it.value}")
+        }
+    }
+
+    // 1. 서치뷰 검색 이벤트
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        // 키보드에서 돋보기를 클릭 시 호출되며, 입력된 text를 받음
+        Log.d(Constants.TAG, "CollectionActivity - 검색 버튼이 클릭, quary : $query")
+
+        // isNullOrEmpty() : null, ""인 경우 true
+        // 검색 버튼이 클릭이 되었으며, 빈 값이 아니면 저장
+        if (!query.isNullOrEmpty()) {
+            binding.topAppBar.title = query
+
+            // SearchHistoryDate 형식의 인스턴스를 생성
+            val newSearchData = SearchHistoryData(timeSet = Date().toString(), value = query)
+
+            // 검색 기록 배열에 인스턴스를 추가
+            this.searchHisttoryList.add(newSearchData)
+
+            // SharedPreferenceManager의 저장 메서드에 검색 기록 배열을 전달
+            SharedPreferenceManager.storeSearchHistory(this.searchHisttoryList)
+        }
+        //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
+        //this.mSearchView.clearFocus()     // 키보드가 내려간다
+        this.binding.topAppBar.collapseActionView()   // 액션뷰가 닫힌다.
+
+        return true
+    }
+~~~

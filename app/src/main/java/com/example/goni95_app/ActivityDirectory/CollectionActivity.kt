@@ -14,10 +14,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.goni95_app.Model.Photo
+import com.example.goni95_app.Model.SearchHistoryData
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityCollectionBinding
 import com.example.goni95_app.recyclerview.PhotoGridRecyclerViewAdapter
 import com.example.goni95_app.util.Constants
+import com.example.goni95_app.util.SharedPreferenceManager
+import java.util.*
+import kotlin.collections.ArrayList
 
 // 검색 인터페이스 설정 : https://developer.android.com/training/search/setup?hl=ko
 // Behavior과 CoordinatorLayout 관계 : https://m.blog.naver.com/PostView.nhn?blogId=pistolcaffe&logNo=221016672922&proxyReferer=https:%2F%2Fwww.google.com%2F
@@ -35,6 +39,9 @@ class CollectionActivity : AppCompatActivity(),
 
     //데이터
     var photoList = ArrayList<Photo>()
+
+    //검색 기록 배열
+    private var searchHisttoryList = ArrayList<SearchHistoryData>()
 
     //어답터
     private lateinit var photoGridRecyclerViewAdapter: PhotoGridRecyclerViewAdapter
@@ -75,6 +82,13 @@ class CollectionActivity : AppCompatActivity(),
             GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         // context, 가로 item 수, 출력 방향, item의 첫, 끝 중 시작 위치
         binding.collectionRecyclerview.adapter = photoGridRecyclerViewAdapter
+
+        //저장될 검색 기록 가져오기
+        this.searchHisttoryList = SharedPreferenceManager.getSearchHistory() as ArrayList<SearchHistoryData>
+
+        this.searchHisttoryList.forEach {
+            Log.d(Constants.TAG, "저장된 검색 기록 - it : ${it.timeSet} ${it.value}")
+        }
 
     }   //onCreate
 
@@ -132,9 +146,18 @@ class CollectionActivity : AppCompatActivity(),
         Log.d(Constants.TAG, "CollectionActivity - 검색 버튼이 클릭, quary : $query")
 
         // isNullOrEmpty() : null, ""인 경우 true
+        // 검색 버튼이 클릭이 되었으며, 빈 값이 아니면 저장
         if (!query.isNullOrEmpty()) {
             binding.topAppBar.title = query
 
+            // SearchHistoryDate 형식의 인스턴스를 생성
+            val newSearchData = SearchHistoryData(timeSet = Date().toString(), value = query)
+
+            // 검색 기록 배열에 인스턴스를 추가
+            this.searchHisttoryList.add(newSearchData)
+
+            // SharedPreferenceManager의 저장 메서드에 검색 기록 배열을 전달
+            SharedPreferenceManager.storeSearchHistory(this.searchHisttoryList)
         }
         //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
         //this.mSearchView.clearFocus()     // 키보드가 내려간다

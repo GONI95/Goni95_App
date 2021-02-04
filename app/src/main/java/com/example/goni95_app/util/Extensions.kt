@@ -3,6 +3,8 @@ package com.example.goni95_app.util
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import java.text.SimpleDateFormat
+import java.util.*
 
 // 문자열이 제이슨 형태인지, 제이슨 배열 형태인지 확인
 fun String?.isJsonObject():Boolean {
@@ -37,4 +39,11 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
             completion(editable)
         }
     })
+}
+
+// 날짜 포맷
+fun Date.toString2() : String{
+    var format = SimpleDateFormat("HH:mm:ss")
+    // 시:분:초 포맷으로 Date의 포맷을 정한다.
+    return format.format(this)
 }

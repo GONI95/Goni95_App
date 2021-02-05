@@ -14,6 +14,7 @@
 * [2. Material Theme Handle](#Material-Theme-Handle)
 * [3. Grid RecyclerView](#Grid-RecyclerView)
 * [4. SearchView](#SearchView_config)
+* [5. SearchHistory 검색어 저장 모드, 전체 삭제, item 삭제, item 선택 구성](#SearchHistoryRecyclerView-config)
 
 ------------
 
@@ -1038,6 +1039,119 @@ object SharedPreferenceManager {
         return true
     }
 ~~~
+
+
+<br><br><br><br><br>
+# Branch : 06_searchHistory_RecyclerView
+## SearchHistoryRecyclerView-config
+
+<br>
+* ISearchHistoryRecyclerView.interface
+~~~kotlin
+interface ISearchHistoryRecyclerView {
+    //SearchHistory 아이템 삭제
+    fun onSearchItemDeleteClicked(position: Int)
+    
+    //SearchHistory 아이템 이벤트
+    fun onSearchItemClicked(position: Int)
+}
+~~~
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+        //검색 기록 리사이클러뷰 준비
+        searchHistoryRecyclerViewSetting(searchHistoryList)
+    }
+    
+     //검색 기록 리사이클러뷰 준비 함수
+    private fun searchHistoryRecyclerViewSetting(searchHistoryList : ArrayList<SearchHistoryData>){
+        searchHistoryRecyclerViewAdapter = SearchHistoryRecyclerViewAdapter(searchHistoryList,
+            iSearchHistoryRecyclerView = this)  // Adapter로 interface를 넘김
+
+        binding.searchHistoryRecyclerview.apply {
+            val mlayoutManager = LinearLayoutManager(this@CollectionActivity,
+                LinearLayoutManager.VERTICAL, true)
+            //출력 위치를 반대로, 순서도 반대로
+            mlayoutManager.stackFromEnd = true  
+            //출력 위치를 정상으로 되돌림
+
+            layoutManager = mlayoutManager
+            adapter = searchHistoryRecyclerViewAdapter
+        }
+    }
+    
+    //searchHistory 아이템 삭제 (인터페이스에서 정의한 함수)
+    override fun onSearchItemDeleteClicked(position: Int) {
+        Log.d(Constants.TAG, "CollectionActivity - onSearchItemDeleteClicked() called : $position")
+    }
+
+    //searchHistory 아이템 이벤트 (인터페이스에서 정의한 함수)
+    override fun onSearchItemClicked(position: Int) {
+        Log.d(Constants.TAG, "CollectionActivity - onSearchItemClicked() called : $position")
+    }
+~~~
+
+<br>
+
+* SearchHistoryRecyclerViewAdapter.kt
+~~~kotlin
+class SearchHistoryRecyclerViewAdapter(searchHistoryList: ArrayList<SearchHistoryData>,
+    iSearchHistoryRecyclerView: ISearchHistoryRecyclerView) : RecyclerView.Adapter<SearchHistoryViewHolder>(){
+    
+    //interface
+    private var iSearchHistoryRecyclerView : ISearchHistoryRecyclerView
+
+    init {
+        Log.d(Constants.TAG, "SearchHistoryRecyclerViewAdapter - init() called")
+        this.iSearchHistoryRecyclerView = iSearchHistoryRecyclerView
+    }
+    
+     // 뷰홀더와 레이아웃 연결
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHistoryViewHolder {
+        return SearchHistoryViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_searchhistory, parent, false)
+            , iSearchHistoryRecyclerView)
+    }
+    ...
+}
+~~~
+
+<br>
+
+* SearchHistoryViewHolder.kt
+~~~kotlin
+ override fun onClick(v: View?) {
+        Log.d(Constants.TAG, "SearchHistoryViewHolder - onClick() called")
+        when(v){
+            deleteImageButton -> {
+                Log.d(Constants.TAG, "SearchHistoryViewHolder - deleteImageButton")
+                iSearchHistoryRecyclerView.onSearchItemDeleteClicked(adapterPosition)
+                //인터페이스에 정의된 아이템 삭제 함수에 adapterPosition(해당 포지션 알려줌) 전달
+            }
+            constraintSearchHistoryItem -> {
+                Log.d(Constants.TAG, "SearchHistoryViewHolder - constraintSearchHistoryItem")
+                iSearchHistoryRecyclerView.onSearchItemClicked(adapterPosition)
+            }
+        }
+    }
+~~~
+#### Interface를 생성하여, 저장된 검색어를 삭제하기 위한 onSearchItemDeleteClicked(), 저장된 검색어에 클릭 이벤트를 위한 onSearchItemClicked() 추상 메서드를 정의하였다.
+#### CollectionActivity는 정의한 interface를 상속받아, Adapter에 전달하고 정의한 추상 메서드를 구현하였다.
+#### Adapter에선 전달받은 interface의 인스턴스를 ViewHolder에 전달하도록 했다.
+#### ViewHoler에선 OnClickListener를 상속받아 구현한 onClick() 메서드에서 클릭 이벤트로 인해 받는 View에 따라 interface에 정의된 추상 메서드에 현재 adapter의 위치값을 전달하여, CollectionActivity에서 위치값을 전달받을 수 있도록 했다. 
+
+### Adapter - ViewHolder와 layout의 연결
+#### SearchHistoryViewHolder(View, interface) - RecyclerView에서 ViewHolder를 만들때 CustomView에서 xml로 정의된 View를 merge할 때,즉 View 만들기 위해서 LayoutInflater를 사용한다.
+#### LayoutInflater.from() : LayoutInflater에 static으로 정의된 LayoutInflater.from()을 통해 LayoutInflater를 만드는 방법 중 하나입니다. 내부적으로 context#getSystemService를 호출하기 있고, 같은 context에선 같은 객체를 리턴하기 때문에 LayoutInflater를 멤버 변수로 선언해 놓지 않고 필요할 때마다 호출해서 사용해도 무방합니다.
+#### inflate() : inflater에서 View 객체를 만들기 위해선 inflate()를 사용합니다. 
+#### params 1 : resource - View를 만들고 싶은 레이아웃 파일의 id를 의미합니다.
+#### params 2 : root - 생성될 View의 parent를 명시해줍니다. null일 경우 LayoutParams 값을 설정할 수 없어 XML 내의 최상위 android:layout_xxxxx 값들이 무시되어 merge tag를 사용할 수 없다
+#### params 3 : attachToRoot - true로 설정하면 root의 자식 View로 자동으로 추가됨, 이때 root는 null일 수 없다
+#### return : attachToRoot에 따라서 리턴값이 달라집니다. true일 경우 root, false일 경우 xml 내 최상위 뷰가 리턴
 
 ## ISSUU
 

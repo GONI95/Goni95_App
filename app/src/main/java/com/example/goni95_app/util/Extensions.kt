@@ -42,8 +42,8 @@ fun EditText.onMyTextChanged(completion : (Editable?) -> Unit){
 }
 
 // 날짜 포맷
-fun Date.toString2() : String{
-    var format = SimpleDateFormat("HH:mm:ss")
+fun Date.toFormatString() : String{
+    var format = SimpleDateFormat("yy.MM.dd  HH:mm:ss")
     // 시:분:초 포맷으로 Date의 포맷을 정한다.
     return format.format(this)
 }

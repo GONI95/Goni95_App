@@ -10,8 +10,38 @@ import com.google.gson.Gson
 // 메모리를 사용하고 그것을 계속 사용하기 위해 싱글턴
 object SharedPreferenceManager {
     //SharedPreference의 KEY로 사용될 상수를 선언
-    private const val SHARED_SHEARCH_HISTORY = "shared_search_history"  // shared 이름 key
+    private const val SHARED_SEARCH_HISTORY = "shared_search_history"  // shared 이름 key
     private const val KEY_SEARCH_HISTORY = "key_search_history" // shared에 저장될 data key
+
+    //저장 모드
+    private const val SHARED_SEARCH_HISTORY_MODE = "shared_search_history_mode"
+    private const val KEY_SAVE_MODE = "key_save_mode"
+
+    //검색어 저장 모드 설정
+    fun setSaveMode(isActivated: Boolean){
+        Log.d(Constants.TAG, "SharedPreferenceManager - setSaveMode() called")
+
+        //sharedPreference 세팅
+        val shared =
+            App.instance.getSharedPreferences(SHARED_SEARCH_HISTORY_MODE, Context.MODE_PRIVATE)
+
+        //sharedPreference editor 세팅
+        val editor = shared.edit()
+
+        editor.putBoolean(KEY_SAVE_MODE, isActivated)
+        editor.apply()  // 변경사항 저장
+    }
+
+    // 검색어 저장 모드 가져오기
+    fun getSaveMode() : Boolean {
+        Log.d(Constants.TAG, "SharedPreferenceManager - getSearchHistoryMode() called")
+
+        val shared =
+            App.instance.getSharedPreferences(SHARED_SEARCH_HISTORY_MODE, Context.MODE_PRIVATE)
+
+        //저장되어있던 data를 가져오기
+        return shared.getBoolean(KEY_SAVE_MODE, false)
+    }
 
     //검색 목록 저장(Gson - 컨버팅)
     fun storeSearchHistory(searchHistoryList: MutableList<SearchHistoryData>){
@@ -24,7 +54,7 @@ object SharedPreferenceManager {
 
         //sharedPreference 세팅
         val shared =
-            App.instance.getSharedPreferences(SHARED_SHEARCH_HISTORY, Context.MODE_PRIVATE)
+            App.instance.getSharedPreferences(SHARED_SEARCH_HISTORY, Context.MODE_PRIVATE)
 
         //sharedPreference editor 세팅
         val editor = shared.edit()
@@ -38,7 +68,7 @@ object SharedPreferenceManager {
         Log.d(Constants.TAG, "SharedPreferenceManager - getSearchHistory() called")
 
         val shared =
-            App.instance.getSharedPreferences(SHARED_SHEARCH_HISTORY, Context.MODE_PRIVATE)
+            App.instance.getSharedPreferences(SHARED_SEARCH_HISTORY, Context.MODE_PRIVATE)
 
         //저장되어있던 data를 가져오기
         val storeSearchHistoryString = shared.getString(KEY_SEARCH_HISTORY, "")!!
@@ -55,5 +85,21 @@ object SharedPreferenceManager {
 
         //sharedPreference editor 세팅
         return storeSearchHistoryList
+    }
+
+    // 검색 목록 지우기
+    fun clearSearchHistoryList(){
+        Log.d(Constants.TAG, "SharedPreferenceManager - clearSearchHistoryList() called")
+
+        //sharedPreference 세팅
+        val shared =
+            App.instance.getSharedPreferences(SHARED_SEARCH_HISTORY, Context.MODE_PRIVATE)
+
+        //sharedPreference editor 세팅
+        val editor = shared.edit()
+
+        editor.clear()  // 해당 데이터 삭제
+        
+        editor.apply()  // 변경사항 저장
     }
 }

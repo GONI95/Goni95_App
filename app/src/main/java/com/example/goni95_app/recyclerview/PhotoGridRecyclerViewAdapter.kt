@@ -13,7 +13,7 @@ class PhotoGridRecyclerViewAdapter : RecyclerView.Adapter<PhotoItemViewHolder>()
     // 뷰홀더와 레이아웃 연결
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoItemViewHolder {
         return PhotoItemViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_photoitem, parent, false)) // layout, viewGroup, ?
+            .inflate(R.layout.layout_photoitem, parent, false))
     }
     
     // 뷰가 묶였을때 데이터를 뷰홀더에 넘겨준다

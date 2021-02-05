@@ -13,13 +13,17 @@ import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goni95_app.Model.Photo
 import com.example.goni95_app.Model.SearchHistoryData
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityCollectionBinding
+import com.example.goni95_app.recyclerview.ISearchHistoryRecyclerView
 import com.example.goni95_app.recyclerview.PhotoGridRecyclerViewAdapter
+import com.example.goni95_app.recyclerview.SearchHistoryRecyclerViewAdapter
 import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.SharedPreferenceManager
+import com.example.goni95_app.util.toFormatString
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -28,7 +32,7 @@ import kotlin.collections.ArrayList
 class CollectionActivity : AppCompatActivity(),
     androidx.appcompat.widget.SearchView.OnQueryTextListener,
     CompoundButton.OnCheckedChangeListener,
-    View.OnClickListener{
+    View.OnClickListener, ISearchHistoryRecyclerView{
 
     //ViewBinding
     private lateinit var binding: ActivityCollectionBinding
@@ -41,10 +45,11 @@ class CollectionActivity : AppCompatActivity(),
     var photoList = ArrayList<Photo>()
 
     //검색 기록 배열
-    private var searchHisttoryList = ArrayList<SearchHistoryData>()
+    private var searchHistoryList = ArrayList<SearchHistoryData>()
 
     //어답터
     private lateinit var photoGridRecyclerViewAdapter: PhotoGridRecyclerViewAdapter
+    private lateinit var searchHistoryRecyclerViewAdapter: SearchHistoryRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +70,8 @@ class CollectionActivity : AppCompatActivity(),
             Constants.TAG,
             "CollectionActivity - getSerializable / arraysize : ${photoList.count()}"
         )
+        //PhotoGrid 리사이클러뷰 준비
+        photoGridRecyclerViewSetting(photoList)
 
         // Listener를 연결
         binding.searchHistorySaveMode.setOnCheckedChangeListener(this)
@@ -74,23 +81,42 @@ class CollectionActivity : AppCompatActivity(),
         setSupportActionBar(binding.topAppBar)
         // ToolBar를 Activity의 App Bar로 사용할 수 있다.
 
-        photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
+        //저장될 검색 기록 가져오기
+        this.searchHistoryList = SharedPreferenceManager.getSearchHistory() as ArrayList<SearchHistoryData>
+        this.searchHistoryList.forEach {
+            Log.d(Constants.TAG, "저장된 검색 기록 - it : ${it.timeSet} ${it.value}")
+        }
+        //검색 기록 리사이클러뷰 준비
+        searchHistoryRecyclerViewSetting(searchHistoryList)
+    }   //onCreate
 
+    //PhotoGrid 리사이클러뷰 준비 함수
+    private fun photoGridRecyclerViewSetting(photoList: ArrayList<Photo>){
+        photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
         photoGridRecyclerViewAdapter.submitList(photoList)  //생성자로 받는다면 필요없음
 
         binding.collectionRecyclerview.layoutManager =
             GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         // context, 가로 item 수, 출력 방향, item의 첫, 끝 중 시작 위치
         binding.collectionRecyclerview.adapter = photoGridRecyclerViewAdapter
+    }
 
-        //저장될 검색 기록 가져오기
-        this.searchHisttoryList = SharedPreferenceManager.getSearchHistory() as ArrayList<SearchHistoryData>
+    //검색 기록 리사이클러뷰 준비 함수
+    private fun searchHistoryRecyclerViewSetting(searchHistoryList : ArrayList<SearchHistoryData>){
+        searchHistoryRecyclerViewAdapter = SearchHistoryRecyclerViewAdapter(searchHistoryList,
+            iSearchHistoryRecyclerView = this)
 
-        this.searchHisttoryList.forEach {
-            Log.d(Constants.TAG, "저장된 검색 기록 - it : ${it.timeSet} ${it.value}")
+        binding.searchHistoryRecyclerview.apply {
+            val mlayoutManager = LinearLayoutManager(this@CollectionActivity,
+                LinearLayoutManager.VERTICAL, true)
+            //출력 위치를 반대로, 순서도 반대로
+            mlayoutManager.stackFromEnd = true  
+            //출력 위치를 정상으로 되돌림
+
+            layoutManager = mlayoutManager
+            adapter = searchHistoryRecyclerViewAdapter
         }
-
-    }   //onCreate
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // 매뉴를 생성
@@ -151,13 +177,13 @@ class CollectionActivity : AppCompatActivity(),
             binding.topAppBar.title = query
 
             // SearchHistoryDate 형식의 인스턴스를 생성
-            val newSearchData = SearchHistoryData(timeSet = Date().toString(), value = query)
+            val newSearchData = SearchHistoryData(timeSet = Date().toFormatString(), value = query)
 
             // 검색 기록 배열에 인스턴스를 추가
-            this.searchHisttoryList.add(newSearchData)
+            this.searchHistoryList.add(newSearchData)
 
             // SharedPreferenceManager의 저장 메서드에 검색 기록 배열을 전달
-            SharedPreferenceManager.storeSearchHistory(this.searchHisttoryList)
+            SharedPreferenceManager.storeSearchHistory(this.searchHistoryList)
         }
         //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
         //this.mSearchView.clearFocus()     // 키보드가 내려간다
@@ -197,7 +223,18 @@ class CollectionActivity : AppCompatActivity(),
         when(v){
             binding.searchHistoryClear -> 
                 Log.d(Constants.TAG, "CollectionActivity - 검색어 삭제 호출")
+
         }
+    }
+
+    //searchHistory 아이템 삭제 (인터페이스에서 정의한 함수)
+    override fun onSearchItemDeleteClicked(position: Int) {
+        Log.d(Constants.TAG, "CollectionActivity - onSearchItemDeleteClicked() called : $position")
+    }
+
+    //searchHistory 아이템 이벤트 (인터페이스에서 정의한 함수)
+    override fun onSearchItemClicked(position: Int) {
+        Log.d(Constants.TAG, "CollectionActivity - onSearchItemClicked() called : $position")
     }
 
 }

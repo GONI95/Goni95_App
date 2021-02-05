@@ -1046,6 +1046,7 @@ object SharedPreferenceManager {
 ## SearchHistoryRecyclerView-config
 
 <br>
+
 * ISearchHistoryRecyclerView.interface
 ~~~kotlin
 interface ISearchHistoryRecyclerView {

@@ -1145,6 +1145,7 @@ class SearchHistoryRecyclerViewAdapter(searchHistoryList: ArrayList<SearchHistor
 #### Adapter에선 전달받은 interface의 인스턴스를 ViewHolder에 전달하도록 했다.
 #### ViewHoler에선 OnClickListener를 상속받아 구현한 onClick() 메서드에서 클릭 이벤트로 인해 받는 View에 따라 interface에 정의된 추상 메서드에 현재 adapter의 위치값을 전달하여, CollectionActivity에서 위치값을 전달받을 수 있도록 했다. 
 
+<br>
 
 ## Adapter - ViewHolder와 layout의 연결
 

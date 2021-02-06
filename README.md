@@ -15,6 +15,7 @@
 * [3. Grid RecyclerView](#Grid-RecyclerView)
 * [4. SearchView](#SearchView_config)
 * [5. SearchHistory 검색어 저장 모드, 전체 삭제, item 삭제, item 선택 구성](#SearchHistoryRecyclerView-config)
+* [6. 검색어 저장 모드, 전체 삭제, item 삭제, item 선택 기능 구현](#userEvent-implement)
 
 ------------
 
@@ -1156,6 +1157,148 @@ class SearchHistoryRecyclerViewAdapter(searchHistoryList: ArrayList<SearchHistor
 #### params 2 : root - 생성될 View의 parent를 명시해줍니다. null일 경우 LayoutParams 값을 설정할 수 없어 XML 내의 최상위 android:layout_xxxxx 값들이 무시되어 merge tag를 사용할 수 없다
 #### params 3 : attachToRoot - true로 설정하면 root의 자식 View로 자동으로 추가됨, 이때 root는 null일 수 없다
 #### return : attachToRoot에 따라서 리턴값이 달라집니다. true일 경우 root, false일 경우 xml 내 최상위 뷰가 리턴
+
+<br><br><br><br><br>
+# Branch : 07_userEvent_implement
+## userEvent-implement
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+ override fun onCreate(savedInstanceState: Bundle?) {
+    ...
+    //검색어 모드 초기값 설정
+    getsearchHistorySaveMode()
+ }
+
+//검색어 저장 모드를 shared에서 가져옴
+    fun getsearchHistorySaveMode() {
+        val getSaveMode = SharedPreferenceManager.getSaveMode()
+        if(getSaveMode){
+            binding.searchHistorySaveMode.isChecked = true
+        }else{
+            binding.searchHistorySaveMode.isChecked = false
+        }
+    }
+~~~
+#### 마지막 사용 시 true로 되어있는 경우 검색어 저장 모드가 기본적으로 false 되어있는 부분을 수정 
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+ override fun onCreate(savedInstanceState: Bundle?) {
+    ...
+      //Home에서 입력한 searchTerm을 받아 검색어 저장 기록에 전달
+        if (searchTerm != null) {
+            insertSearchTermHistory(searchTerm)
+        }
+ }
+ 
+ // 1. 서치뷰 검색 이벤트
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        // 키보드에서 돋보기를 클릭 시 호출되며, 입력된 text를 받음
+        Log.d(Constants.TAG, "CollectionActivity - 검색 버튼이 클릭, quary : $query")
+
+        // isNullOrEmpty() : null, ""인 경우 true
+        // 검색 버튼이 클릭이 되었으며, 빈 값이 아니면 저장
+        if (!query.isNullOrEmpty()) {
+            
+            searchPhotoApiCall(query)   //사진 검색 Api 호출
+            
+            binding.topAppBar.title = query
+
+            insertSearchTermHistory(query)
+            //검색어 모드가 true일 때 검색어 저장
+        }
+        //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
+        //this.mSearchView.clearFocus()     // 키보드가 내려간다
+        this.binding.topAppBar.collapseActionView()   // 액션뷰가 닫힌다.
+
+        return true
+    }
+ 
+ //searchHistory 검색어 아이템 이벤트 (인터페이스에서 정의한 함수)
+    override fun onSearchItemClicked(position: Int) {
+        Log.d(Constants.TAG, "CollectionActivity - onSearchItemClicked() called : $position")
+
+        //받아온 위치값을 이용해 list의 위치값에 element를 찾아 api를 call
+        val query = searchHistoryList[position].value
+
+        searchPhotoApiCall(query)
+        binding.topAppBar.title = query
+        insertSearchTermHistory(query)
+        binding.topAppBar.collapseActionView()
+    }
+
+// 검색어 저장
+    private fun insertSearchTermHistory(searchTerm: String) {
+        Log.d(Constants.TAG, "CollectionActivity - insertSearchTermHistory() called")
+
+        if (SharedPreferenceManager.getSaveMode() == true) {
+            Log.d(Constants.TAG, "저장 모드 확인 후 진입완료")
+            // 중복 아이템 삭제
+
+                val iter = searchHistoryList.iterator()
+                while (iter.hasNext()) {
+                    val iter_value = iter.next()
+                    if(searchTerm.equals(iter_value.value)){
+                        Log.d(Constants.TAG, "value: ${iter_value}")
+                        Log.d(Constants.TAG, "serchTerm: $searchTerm")
+
+                        iter.remove()
+                        Log.d(Constants.TAG, "삭제 작업했습니다.")
+                        break
+                    }
+                }
+            // SearchHistoryDate 형식의 인스턴스를 생성
+            val newSearchData = SearchHistoryData(timeSet = Date().toFormatString(), value = searchTerm)
+
+            // 검색 기록 배열에 인스턴스를 추가
+            this.searchHistoryList.add(newSearchData)
+
+            // 기존 데이터에 덮어쓰기
+            SharedPreferenceManager.storeSearchHistory(searchHistoryList)
+            this.searchHistoryRecyclerViewAdapter.notifyDataSetChanged()
+        }else{
+            Log.d(Constants.TAG, "검색어 저장 기능 꺼져있음.")
+        }
+    }
+    
+    //사진 검색 api 호출
+    private fun searchPhotoApiCall(query: String?){
+        RetrofitManager.instance.searchPhotos(searchTerm = query, completion = { status, list ->
+            when(status){
+                RESPONSE_STATE.OK -> {
+                    Log.d(Constants.TAG, "CollectionActivity - searchPhotoApiCall() called")
+
+                    if (list != null) {
+                        photoList.clear()
+                        photoList = list
+                        photoGridRecyclerViewAdapter.submitList(photoList)
+                        photoGridRecyclerViewAdapter.notifyDataSetChanged()
+                    }
+                }
+                RESPONSE_STATE.NONE -> {
+                    Toast.makeText(this, "검색 결과가 없습니다: $query", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+~~~
+#### 저장된 검색어를 이용해 API를 호출하기 위해 searchPhotoApiCall() 메서드를 만들었습니다.
+
+#### 서치뷰에 입력한 값을 전달받아 이전에 저장되어있던 검색어일 경우, 새롭게 갱신하기 위해서 insertSearchTermHistory() 메서드를 만들었습니다.
+#### 검색어를 저장한 List에 forEach{} 구문으로 index를 삭제할 경우 java.util.ConcurrentModificationException가 발생하여 Iterator를 이용했습니다.
+
+<br>
+
+#### insertSearchTermHistory() 메서드를 이용해 서치뷰의 입력값을 검색하면 검색어의 유무를 확인하여 검색어를 갱신하고, API를 호출합니다.
+
+<br>
+
+#### 검색어가 표시하는 RecyclerView에서 각 Item을 선택하면, 해당 Item의 검색어 값을 이용해 API를 호출하고 새로운 PhotoGridRecyclerView를 출력하며, insertSearchTermHistory() 메서드를 이용해 검색어를 갱신합니다.
 
 ------------
 

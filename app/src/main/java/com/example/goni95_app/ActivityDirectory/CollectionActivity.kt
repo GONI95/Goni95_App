@@ -21,7 +21,9 @@ import com.example.goni95_app.databinding.ActivityCollectionBinding
 import com.example.goni95_app.recyclerview.ISearchHistoryRecyclerView
 import com.example.goni95_app.recyclerview.PhotoGridRecyclerViewAdapter
 import com.example.goni95_app.recyclerview.SearchHistoryRecyclerViewAdapter
+import com.example.goni95_app.retrofit.RetrofitManager
 import com.example.goni95_app.util.Constants
+import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SharedPreferenceManager
 import com.example.goni95_app.util.toFormatString
 import java.util.*
@@ -77,6 +79,8 @@ class CollectionActivity : AppCompatActivity(),
         binding.searchHistorySaveMode.setOnCheckedChangeListener(this)
         binding.searchHistoryClear.setOnClickListener(this)
 
+        getsearchHistorySaveMode()
+
         binding.topAppBar.title = searchTerm
         setSupportActionBar(binding.topAppBar)
         // ToolBar를 Activity의 App Bar로 사용할 수 있다.
@@ -88,7 +92,14 @@ class CollectionActivity : AppCompatActivity(),
         }
         //검색 기록 리사이클러뷰 준비
         searchHistoryRecyclerViewSetting(searchHistoryList)
-    }   //onCreate
+
+        //Home에서 입력한 searchTerm을 받아 검색어 저장 기록에 전달
+        if (searchTerm != null) {
+            insertSearchTermHistory(searchTerm)
+        }
+
+    }
+    //onCreate
 
     //PhotoGrid 리사이클러뷰 준비 함수
     private fun photoGridRecyclerViewSetting(photoList: ArrayList<Photo>){
@@ -174,16 +185,13 @@ class CollectionActivity : AppCompatActivity(),
         // isNullOrEmpty() : null, ""인 경우 true
         // 검색 버튼이 클릭이 되었으며, 빈 값이 아니면 저장
         if (!query.isNullOrEmpty()) {
+            
+            searchPhotoApiCall(query)   //사진 검색 Api 호출
+            
             binding.topAppBar.title = query
 
-            // SearchHistoryDate 형식의 인스턴스를 생성
-            val newSearchData = SearchHistoryData(timeSet = Date().toFormatString(), value = query)
-
-            // 검색 기록 배열에 인스턴스를 추가
-            this.searchHistoryList.add(newSearchData)
-
-            // SharedPreferenceManager의 저장 메서드에 검색 기록 배열을 전달
-            SharedPreferenceManager.storeSearchHistory(this.searchHistoryList)
+            insertSearchTermHistory(query)
+            //검색어 모드가 true일 때 검색어 저장
         }
         //this.mSearchView.setQuery("", false)    // SearchView의 입력값을 빈값으로 초기화
         //this.mSearchView.clearFocus()     // 키보드가 내려간다
@@ -209,32 +217,118 @@ class CollectionActivity : AppCompatActivity(),
     // 3. Search_History_Save_Mode
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         when(buttonView){
-            binding.searchHistorySaveMode ->
-                if (isChecked == true){
+            binding.searchHistorySaveMode -> if (isChecked == true){
                     Log.d(Constants.TAG, "CollectionActivity - 검색어 저장기능 활성화")
+                    SharedPreferenceManager.setSaveMode(isActivated = true)
             } else {
                     Log.d(Constants.TAG, "CollectionActivity - 검색어 저장기능 비활성화")
+                    SharedPreferenceManager.setSaveMode(isActivated = false)
             }
         }
     }
 
-    // 4. Search_History_Clear
+    // 4. Search_History_Clear (검색어 전체 삭제)
     override fun onClick(v: View?) {
-        when(v){
-            binding.searchHistoryClear -> 
-                Log.d(Constants.TAG, "CollectionActivity - 검색어 삭제 호출")
+        // 검색 결과가 없을땐 메서드를 생성해 Invisible 처리하는 것도 좋아보이지만 굳이 할 필요없어보임
 
+        when(v){
+            binding.searchHistoryClear -> {
+                Log.d(Constants.TAG, "CollectionActivity - 검색어 삭제 호출")
+                
+                if (searchHistoryList.size != 0){
+                    SharedPreferenceManager.clearSearchHistoryList()
+                    searchHistoryList.clear()
+                    searchHistoryRecyclerViewAdapter.notifyDataSetChanged()
+                }else {
+                    Toast.makeText(this, "삭제할 검색어가 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     //searchHistory 아이템 삭제 (인터페이스에서 정의한 함수)
     override fun onSearchItemDeleteClicked(position: Int) {
         Log.d(Constants.TAG, "CollectionActivity - onSearchItemDeleteClicked() called : $position")
+        searchHistoryList.removeAt(position)    // list에서 해당 위치 데이터 삭제
+        SharedPreferenceManager.storeSearchHistory(searchHistoryList)   // 해당 list로 덮어씀
+        searchHistoryRecyclerViewAdapter.notifyDataSetChanged() //데이터 변경을 알리고 새로 씀
     }
 
-    //searchHistory 아이템 이벤트 (인터페이스에서 정의한 함수)
+    //searchHistory 검색어 아이템 이벤트 (인터페이스에서 정의한 함수)
     override fun onSearchItemClicked(position: Int) {
         Log.d(Constants.TAG, "CollectionActivity - onSearchItemClicked() called : $position")
+
+        //받아온 위치값을 이용해 list의 위치값에 element를 찾아 api를 call
+        val query = searchHistoryList[position].value
+
+        searchPhotoApiCall(query)
+        binding.topAppBar.title = query
+        insertSearchTermHistory(query)
+        binding.topAppBar.collapseActionView()
     }
 
+    //사진 검색 api 호출
+    private fun searchPhotoApiCall(query: String?){
+        RetrofitManager.instance.searchPhotos(searchTerm = query, completion = { status, list ->
+            when(status){
+                RESPONSE_STATE.OK -> {
+                    Log.d(Constants.TAG, "CollectionActivity - searchPhotoApiCall() called")
+
+                    if (list != null) {
+                        photoList.clear()
+                        photoList = list
+                        photoGridRecyclerViewAdapter.submitList(photoList)
+                        photoGridRecyclerViewAdapter.notifyDataSetChanged()
+                    }
+                }
+                RESPONSE_STATE.NONE -> {
+                    Toast.makeText(this, "검색 결과가 없습니다: $query", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    // 검색어 저장
+    private fun insertSearchTermHistory(searchTerm: String) {
+        Log.d(Constants.TAG, "CollectionActivity - insertSearchTermHistory() called")
+
+        if (SharedPreferenceManager.getSaveMode() == true) {
+            Log.d(Constants.TAG, "저장 모드 확인 후 진입완료")
+            // 중복 아이템 삭제
+
+                val iter = searchHistoryList.iterator()
+                while (iter.hasNext()) {
+                    val iter_value = iter.next()
+                    if(searchTerm.equals(iter_value.value)){
+                        Log.d(Constants.TAG, "value: ${iter_value}")
+                        Log.d(Constants.TAG, "serchTerm: $searchTerm")
+
+                        iter.remove()
+                        Log.d(Constants.TAG, "삭제 작업했습니다.")
+                        break
+                    }
+                }
+            // SearchHistoryDate 형식의 인스턴스를 생성
+            val newSearchData = SearchHistoryData(timeSet = Date().toFormatString(), value = searchTerm)
+
+            // 검색 기록 배열에 인스턴스를 추가
+            this.searchHistoryList.add(newSearchData)
+
+            // 기존 데이터에 덮어쓰기
+            SharedPreferenceManager.storeSearchHistory(searchHistoryList)
+            this.searchHistoryRecyclerViewAdapter.notifyDataSetChanged()
+        }else{
+            Log.d(Constants.TAG, "검색어 저장 기능 꺼져있음.")
+        }
+    }
+
+    //검색어 저장 모드를 shared에서 가져옴
+    fun getsearchHistorySaveMode() {
+        val getSaveMode = SharedPreferenceManager.getSaveMode()
+        if(getSaveMode){
+            binding.searchHistorySaveMode.isChecked = true
+        }else{
+            binding.searchHistorySaveMode.isChecked = false
+        }
+    }
 }

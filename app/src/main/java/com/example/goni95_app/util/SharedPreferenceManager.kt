@@ -19,7 +19,7 @@ object SharedPreferenceManager {
 
     //검색어 저장 모드 설정
     fun setSaveMode(isActivated: Boolean){
-        Log.d(Constants.TAG, "SharedPreferenceManager - setSaveMode() called")
+        Log.d(Constants.TAG, "SharedPreferenceManager - setSaveMode() isActivated: $isActivated")
 
         //sharedPreference 세팅
         val shared =

@@ -187,7 +187,7 @@ class CollectionActivity : AppCompatActivity(),
             //RxBinding을 통해서 text가 변경되면 Observable을 만듬
             val editTextChangeObservable = mSearchViewEditText.textChanges()
 
-            // 오퍼레이터 추가, 쓰레드 -> 입력 스케줄러에 넣겠다
+            // debounce 오퍼레이터 추가
             //Observable에서 발행된 item들의 원천인 Observable과 최종의 Subscriber 사이에서 조작
             val searchEditTextSubscription : Disposable =
                 //글자가 입력되고 0.8초 후 onNext() 이벤트로 데이터 보내기

@@ -69,4 +69,13 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
+    //Rx - java, kotlin, android -> android의 스레드를 java의 스케줄러와 연결하기 위해 필요
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.9'
+    implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+
+    //RxBinding - editText 등의 안드로이드 뷰 컴포넌트들과 연결시켜주는 것
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+
 }

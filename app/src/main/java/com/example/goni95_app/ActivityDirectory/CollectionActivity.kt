@@ -26,11 +26,18 @@ import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SharedPreferenceManager
 import com.example.goni95_app.util.toFormatString
+import com.jakewharton.rxbinding4.widget.textChanges
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 // 검색 인터페이스 설정 : https://developer.android.com/training/search/setup?hl=ko
 // Behavior과 CoordinatorLayout 관계 : https://m.blog.naver.com/PostView.nhn?blogId=pistolcaffe&logNo=221016672922&proxyReferer=https:%2F%2Fwww.google.com%2F
+//RxJava 메모리 누수 막기 : https://beomseok95.tistory.com/60
 class CollectionActivity : AppCompatActivity(),
     androidx.appcompat.widget.SearchView.OnQueryTextListener,
     CompoundButton.OnCheckedChangeListener,
@@ -45,6 +52,10 @@ class CollectionActivity : AppCompatActivity(),
 
     //데이터
     var photoList = ArrayList<Photo>()
+
+    //CompositeDisposable에 subscribe() 함수의 반환형인 Disposable을 담아서 처리
+    //CompositeDisposable class를 이용하여 생성된 모든 Observable을 생명주기에 맞춰 해제가 가능
+    private var compositeDisposable = CompositeDisposable()
 
     //검색 기록 배열
     private var searchHistoryList = ArrayList<SearchHistoryData>()
@@ -101,6 +112,12 @@ class CollectionActivity : AppCompatActivity(),
     }
     //onCreate
 
+    override fun onDestroy() {
+        //사용했으니 디스포저블 삭제
+        compositeDisposable.clear()
+        super.onDestroy()
+    }
+
     //PhotoGrid 리사이클러뷰 준비 함수
     private fun photoGridRecyclerViewSetting(photoList: ArrayList<Photo>){
         photoGridRecyclerViewAdapter = PhotoGridRecyclerViewAdapter()
@@ -154,7 +171,7 @@ class CollectionActivity : AppCompatActivity(),
                     // Linear_Search_History 활성화 유무를 변경
                     true -> {
                         Log.d(Constants.TAG, "CollectionActivity - 서치뷰 활성화")
-                        binding.linearSearchHistory.visibility = View.VISIBLE
+                        //binding.linearSearchHistory.visibility = View.VISIBLE
                     }
                     false -> {
                         Log.d(Constants.TAG, "CollectionActivity - 서치뷰 비활성화")
@@ -165,6 +182,39 @@ class CollectionActivity : AppCompatActivity(),
 
             // SearchView의 EditText를 가져온다.
             mSearchViewEditText = this.findViewById(androidx.appcompat.R.id.search_src_text)
+
+            //textChanges() : editText의 내용이 있는지 없는지 확인
+            //RxBinding을 통해서 text가 변경되면 Observable을 만듬
+            val editTextChangeObservable = mSearchViewEditText.textChanges()
+
+            // 오퍼레이터 추가, 쓰레드 -> 입력 스케줄러에 넣겠다
+            //Observable에서 발행된 item들의 원천인 Observable과 최종의 Subscriber 사이에서 조작
+            val searchEditTextSubscription : Disposable =
+                //글자가 입력되고 0.8초 후 onNext() 이벤트로 데이터 보내기
+                //debounce() : 연속적인 이벤트를 처리하는 흐름 제어 함수
+                editTextChangeObservable.debounce(800, TimeUnit.MILLISECONDS)
+                    // subscribeOn() : 작업 스레드를 설정
+                    // Schedulers.io() : 동기 I/O를 별도로 처리해 비동기 효율을 얻는 스케줄러
+                    .subscribeOn(Schedulers.io())
+                    //구독하여 이벤트에 대한 응답을 받게된다.
+                    .subscribeBy(
+                        onNext = {
+                            Log.d(Constants.TAG, "onNext : $it")
+                            if(it.isNotEmpty()){
+                                searchPhotoApiCall(it.toString())
+                            }
+                        },
+                        onComplete = {
+                            //실행되면 흐름이 끊김
+                            Log.d(Constants.TAG, "onComplete")
+                        },
+                        onError = {
+                            //실행되면 흐름이 끊김
+                            Log.d(Constants.TAG, "onError")
+                        }
+                    )
+            compositeDisposable.add(searchEditTextSubscription)
+            //Observable 객체에서 발행된 후 반환된 객체의 관리를 위해 compositeDisposable에 추가
         }
         
         // SearchView의 EditText에 길이 제한, 컬러를 수정

@@ -6,6 +6,7 @@
 * [4. High Order Function](#High-Order-Function)
 * [5. Application Class Handle](#Application-Class)
 * [6. SharedPreference](#SharedPreference_config)
+* [7. RxAndroid](#Rx)
 
 
 <br><br><br>
@@ -1299,6 +1300,65 @@ class SearchHistoryRecyclerViewAdapter(searchHistoryList: ArrayList<SearchHistor
 <br>
 
 #### 검색어가 표시하는 RecyclerView에서 각 Item을 선택하면, 해당 Item의 검색어 값을 이용해 API를 호출하고 새로운 PhotoGridRecyclerView를 출력하며, insertSearchTermHistory() 메서드를 이용해 검색어를 갱신합니다.
+
+
+<br><br><br><br><br>
+# Branch : 08_Rx
+## Rx
+
+<br>
+
+* CollectionActivity.kt
+~~~kotlin
+//CompositeDisposable에 subscribe() 함수의 반환형인 Disposable을 담아서 처리
+    //CompositeDisposable class를 이용하여 생성된 모든 Observable을 생명주기에 맞춰 해제가 가능
+    private var compositeDisposable = CompositeDisposable()
+
+override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    ...
+    
+     this.mSearchView.apply {
+        ...
+        
+         //textChanges() : editText의 내용이 있는지 없는지 확인
+            //RxBinding을 통해서 text가 변경되면 Observable을 만듬
+            val editTextChangeObservable = mSearchViewEditText.textChanges()
+
+            // debounce 오퍼레이터 추가
+            //Observable에서 발행된 item들의 원천인 Observable과 최종의 Subscriber 사이에서 조작
+            val searchEditTextSubscription : Disposable =
+                //글자가 입력되고 0.8초 후 onNext() 이벤트로 데이터 보내기
+                //debounce() : 연속적인 이벤트를 처리하는 흐름 제어 함수
+                editTextChangeObservable.debounce(800, TimeUnit.MILLISECONDS)
+                    // subscribeOn() : 작업 스레드를 설정
+                    // Schedulers.io() : 동기 I/O를 별도로 처리해 비동기 효율을 얻는 스케줄러
+                    .subscribeOn(Schedulers.io())
+                    //구독하여 이벤트에 대한 응답을 받게된다.
+                    .subscribeBy(
+                        onNext = {
+                            Log.d(Constants.TAG, "onNext : $it")
+                            if(it.isNotEmpty()){
+                                searchPhotoApiCall(it.toString())
+                            }
+                        },
+                        onComplete = {
+                            //실행되면 흐름이 끊김
+                            Log.d(Constants.TAG, "onComplete")
+                        },
+                        onError = {
+                            //실행되면 흐름이 끊김
+                            Log.d(Constants.TAG, "onError")
+                        }
+                    )
+            compositeDisposable.add(searchEditTextSubscription)
+            //Observable 객체에서 발행된 후 반환된 객체의 관리를 위해 compositeDisposable에 추가
+     
+     }
+    }
+~~~
+#### RxJava의 debounce 오퍼레이터를 이용해 이벤트에 대한 필터링을 한 후 onNext()로 item이 발행된다.
+
+<br>
 
 ------------
 

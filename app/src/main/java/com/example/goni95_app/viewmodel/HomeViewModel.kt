@@ -1,33 +1,41 @@
-package com.example.goni95_app.retrofit
+package com.example.goni95_app.viewmodel
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import com.example.goni95_app.Model.Photo
+import com.example.goni95_app.retrofit.IRetrofit_Service
+import com.example.goni95_app.retrofit.RetrofitClient
 import com.example.goni95_app.util.API
 import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
 import com.google.gson.JsonElement
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import retrofit2.Call
 import retrofit2.Response
 import java.text.SimpleDateFormat
 
-class RetrofitManager {
-    companion object {
-        val instance = RetrofitManager()
-        // 객체생성
-    }
+class HomeViewModel : ViewModel() {
 
     // http call 생성
     // 레트로핏 인터페이스 가져오기
-    private val iretrofitService: IRetrofit_Service? =
-        RetrofitClient.getClient(API.BASE_URL)?.create(IRetrofit_Service::class.java)
+    private val iretrofitService : IRetrofit_Service
+    private val job = Job() //Job 객체 생성
+    private val BackgroundScope = CoroutineScope(Dispatchers.IO + job)
+
+
+    init {
+        iretrofitService = (RetrofitClient.getClient(API.BASE_URL)?.create(
+            IRetrofit_Service::class.java) ?: null) as IRetrofit_Service
+    }
 
     //사진검색 api 호출
     fun searchPhotos(searchTerm: String?, completion: (RESPONSE_STATE, ArrayList<Photo>?) -> Unit) {
         val term = searchTerm.let { it } ?: ""
         val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
 
-       /*
         call.enqueue(object : retrofit2.Callback<JsonElement> {
             // 수행한 Request에 대한 Response를 받는 콜백 메서드
             @SuppressLint("SimpleDateFormat")   // SimpleDateFormat 경고 무시
@@ -109,12 +117,11 @@ class RetrofitManager {
             }
 
         })
-        */
     }
 
-
-    //사용자검색 api 호출
-    fun searchUsers() {
-
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
+
 }

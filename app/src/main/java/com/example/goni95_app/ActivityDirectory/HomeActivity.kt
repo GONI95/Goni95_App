@@ -98,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
                     RESPONSE_STATE.OK -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
 
-                       /*
+
                         val intent = Intent(this, CollectionActivity::class.java)
                         val bundle = Bundle()
                         bundle.putSerializable("photo_array_list", responsePhotoArrayList)
@@ -111,7 +111,7 @@ class HomeActivity : AppCompatActivity() {
                         intent.putExtra("searchTerm", userSearchInput)
                         // 사용자가 입력한 입력값(AppBar의 Title로 사용)
                         startActivity(intent)
-                        */
+
                     }
                     RESPONSE_STATE.FAIL -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")

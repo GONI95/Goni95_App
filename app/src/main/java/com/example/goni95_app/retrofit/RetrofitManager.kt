@@ -25,7 +25,7 @@ class RetrofitManager {
     //사진검색 api 호출
     fun searchPhotos(searchTerm: String?, completion: (RESPONSE_STATE, ArrayList<Photo>?) -> Unit) {
         val term = searchTerm.let { it } ?: ""
-        val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
+        //val call = iretrofitService?.serachPhotos(searchTerm = term).let { it } ?: return
 
        /*
         call.enqueue(object : retrofit2.Callback<JsonElement> {

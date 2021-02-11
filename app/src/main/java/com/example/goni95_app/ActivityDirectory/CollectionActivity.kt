@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.InputFilter
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
@@ -227,6 +228,24 @@ class CollectionActivity : AppCompatActivity(),
         return true
     }
 
+    //menuIcon
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.more_menu_item -> {
+                Log.d(Constants.TAG, "더보기 메뉴2")
+            }
+            R.id.search_history_menu_item -> {
+                if (binding.linearSearchHistory.visibility == View.VISIBLE){
+                    binding.linearSearchHistory.visibility = View.INVISIBLE
+                }else{
+                    binding.linearSearchHistory.visibility = View.VISIBLE
+                }
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     // 1. 서치뷰 검색 이벤트
     override fun onQueryTextSubmit(query: String?): Boolean {
         // 키보드에서 돋보기를 클릭 시 호출되며, 입력된 text를 받음
@@ -315,6 +334,7 @@ class CollectionActivity : AppCompatActivity(),
         binding.topAppBar.title = query
         insertSearchTermHistory(query)
         binding.topAppBar.collapseActionView()
+        binding.linearSearchHistory.visibility = View.INVISIBLE
     }
 
     //사진 검색 api 호출

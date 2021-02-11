@@ -15,11 +15,14 @@
     -->
 
     <item
+        android:id="@+id/search_history_menu_item"
+        android:title="@string/menu_item_search_history"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/more_menu_item"
-        android:icon="@drawable/ic_more_vert"
         android:title="@string/more"
-        android:contentDescription="@string/content_description_more"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 
 </menu>

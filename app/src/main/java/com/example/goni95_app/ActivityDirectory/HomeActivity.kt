@@ -3,10 +3,10 @@ package com.example.goni95_app.ActivityDirectory
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityHomeBinding
@@ -15,10 +15,13 @@ import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
 import com.example.goni95_app.util.SEARCH_TYPE
 import com.example.goni95_app.util.onMyTextChanged
+import com.example.goni95_app.viewmodel.HomeViewModel
 
 // Bundle : https://www.crocus.co.kr/1560
 class HomeActivity : AppCompatActivity() {
 
+    //viewModel 선언
+    private val viewModel by viewModels<HomeViewModel>()
     private var currentSearchType: SEARCH_TYPE = SEARCH_TYPE.PHOTO
     private lateinit var binding: ActivityHomeBinding
 
@@ -87,13 +90,14 @@ class HomeActivity : AppCompatActivity() {
             
             //검색 api 호출
             val userSearchInput = binding.searchEditText.text.toString()
-            RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
+            viewModel.searchPhotos(searchTerm = userSearchInput, completion = {
                     response_state, responsePhotoArrayList ->
                 // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
 
                 when(response_state){
                     RESPONSE_STATE.OK -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
+
 
                         val intent = Intent(this, CollectionActivity::class.java)
                         val bundle = Bundle()
@@ -107,6 +111,7 @@ class HomeActivity : AppCompatActivity() {
                         intent.putExtra("searchTerm", userSearchInput)
                         // 사용자가 입력한 입력값(AppBar의 Title로 사용)
                         startActivity(intent)
+
                     }
                     RESPONSE_STATE.FAIL -> {
                         Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">사진검색 API</string>
+
+    <!-- activity_home.xml / HomeAcitivty.kt -->
+    <string name="Photo_search">사진검색</string>
+    <string name="User_search">사용자검색</string>
+    <string name="Enter_search_word">검색어를 입력하시오.</string>
+    <string name="String_length_limit">검색어 제한 : 15자</string>
+    <string name="No_search_results">검색 결과가 없습니다. </string>
+
+    <!-- customlayout_button -->
+    <string name="search">SEARCH</string>
+
+    <!-- activity_collection -->
+    <string name="page_title">사진검색</string>
+    <string name="more">더보기</string>
+    <string name="content_description_search">사진을 검색합니다.</string>
+    <string name="content_description_more">더보기 메뉴입니다.</string>
+    <string name="search_history_save">검색어 저장</string>
+    <string name="search_history_clear">전체 삭제</string>
+</resources>

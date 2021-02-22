@@ -78,4 +78,8 @@ dependencies {
     //RxBinding - editText 등의 안드로이드 뷰 컴포넌트들과 연결시켜주는 것
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
+    // val viewModel by viewModels<MyViewModel>()
+    def ktx_version = "1.2.5"
+    implementation "androidx.fragment:fragment-ktx:$ktx_version"
+
 }

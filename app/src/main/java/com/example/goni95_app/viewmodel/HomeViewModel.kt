@@ -25,9 +25,6 @@ class HomeViewModel : ViewModel() {
     // http call 생성
     // 레트로핏 인터페이스 가져오기
     private val iretrofitService : IRetrofit_Service
-    private val job = Job() //Job 객체 생성
-    private val BackgroundScope = CoroutineScope(Dispatchers.IO + job)
-
 
     init {
         iretrofitService = (RetrofitClient.getClient(API.BASE_URL)?.create(
@@ -102,11 +99,6 @@ class HomeViewModel : ViewModel() {
                 completion(RESPONSE_STATE.OK, parsedPhotoDataArray)
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
     }
 
 }

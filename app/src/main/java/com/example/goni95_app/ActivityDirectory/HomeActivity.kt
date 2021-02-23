@@ -87,45 +87,96 @@ class HomeActivity : AppCompatActivity() {
             Log.d(Constants.TAG, "HomeActivity SEARCH 버튼 클릭 - currentSearchType : ${currentSearchType}")
 
             handleSearchButton()    // 프로그래스바 활성화
-            
+
             //검색 api 호출
             val userSearchInput = binding.searchEditText.text.toString()
-            viewModel.searchPhotos(searchTerm = userSearchInput, completion = {
-                    response_state, responsePhotoArrayList ->
-                // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
 
-                when(response_state){
-                    RESPONSE_STATE.OK -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
+            if(currentSearchType == SEARCH_TYPE.PHOTO){
+                Log.d(Constants.TAG, "HomeActivity api 사진 검색 요청")
+
+                //검색 api 호출
+                RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
+                        response_state, responsePhotoArrayList ->
+                    // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
+
+                    when(response_state){
+                        RESPONSE_STATE.OK -> {
+                            Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responsePhotoArrayList?.size}")
 
 
-                        val intent = Intent(this, CollectionActivity::class.java)
-                        val bundle = Bundle()
-                        bundle.putSerializable("photo_array_list", responsePhotoArrayList)
-                        //bundle은 Parcelable 객체를 상속받아 구현된 직렬화 class로, bundle 객체는 내부적으로 HashMap을 사용하며,
-                        // Parcelable로 구현되어 있어 간단한 데이터 전달에 유용하다.
-                        // putSerializable()을 이용하면 객체가 Serialzable을 상속받고 있다면 객체를 보낼 수 있다.
-                        // 직렬화 : 객체를 바이트 스트림으로 바꾸어, 객체에 저장된 데이터를 스트림에 쓰기위해 연속적인 serial 데이터로 변환
-                        intent.putExtra("array_bundle", bundle)
-                        //intent.putExtra()로 해당 번들을 넣는다.
-                        intent.putExtra("searchTerm", userSearchInput)
-                        // 사용자가 입력한 입력값(AppBar의 Title로 사용)
-                        startActivity(intent)
+                            val intent = Intent(this, CollectionActivity::class.java)
+                            val bundle = Bundle()
+                            bundle.putSerializable("photo_array_list", responsePhotoArrayList)
+                            //bundle은 Parcelable 객체를 상속받아 구현된 직렬화 class로, bundle 객체는 내부적으로 HashMap을 사용하며,
+                            // Parcelable로 구현되어 있어 간단한 데이터 전달에 유용하다.
+                            // putSerializable()을 이용하면 객체가 Serialzable을 상속받고 있다면 객체를 보낼 수 있다.
+                            // 직렬화 : 객체를 바이트 스트림으로 바꾸어, 객체에 저장된 데이터를 스트림에 쓰기위해 연속적인 serial 데이터로 변환
+                            intent.putExtra("array_bundle", bundle)
+                            //intent.putExtra()로 해당 번들을 넣는다.
+                            intent.putExtra("searchTerm", userSearchInput)
+                            // 사용자가 입력한 입력값(AppBar의 Title로 사용)
+                            startActivity(intent)
 
+                        }
+                        RESPONSE_STATE.FAIL -> {
+                            Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")
+                        }
+                        RESPONSE_STATE.NONE -> {
+                            Toast.makeText(this, getString(R.string.No_search_results), Toast.LENGTH_SHORT).show()
+                            binding.searchEditText.setText("")
+                            //검색 결과가 없을 때만 검색창 초기화
+                        }
                     }
-                    RESPONSE_STATE.FAIL -> {
-                        Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responsePhotoArrayList}")
-                    }
-                    RESPONSE_STATE.NONE -> {
-                        Toast.makeText(this, getString(R.string.No_search_results), Toast.LENGTH_SHORT).show()
-                        binding.searchEditText.setText("")
-                        //검색 결과가 없을 때만 검색창 초기화
-                    }
-                }
 
-                handleSearchButton()
-                // 프로그래스바 비활성화
-            })
+                    handleSearchButton()
+                    // 프로그래스바 비활성화
+                })
+
+
+            }else if(currentSearchType == SEARCH_TYPE.USER){
+                Log.d(Constants.TAG, "HomeActivity api 사용자 검색 요청")
+
+                RetrofitManager.instance.searchUsers(searchTerm = userSearchInput, completion = {
+                        response_state, responseUserArrayList ->
+                    // responsePhotoArrayList : RetrofitManager.kt에서 Parsing한 Photo타입의 ArrayList
+
+                    when(response_state){
+                        RESPONSE_STATE.OK -> {
+                            Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responseUserArrayList?.size}")
+
+
+                           /*
+                            val intent = Intent(this, CollectionActivity::class.java)
+                            val bundle = Bundle()
+                            bundle.putSerializable("user_array_list", responseUserArrayList)
+                            //bundle은 Parcelable 객체를 상속받아 구현된 직렬화 class로, bundle 객체는 내부적으로 HashMap을 사용하며,
+                            // Parcelable로 구현되어 있어 간단한 데이터 전달에 유용하다.
+                            // putSerializable()을 이용하면 객체가 Serialzable을 상속받고 있다면 객체를 보낼 수 있다.
+                            // 직렬화 : 객체를 바이트 스트림으로 바꾸어, 객체에 저장된 데이터를 스트림에 쓰기위해 연속적인 serial 데이터로 변환
+                            intent.putExtra("array_bundle", bundle)
+                            //intent.putExtra()로 해당 번들을 넣는다.
+                            intent.putExtra("searchTerm", userSearchInput)
+                            // 사용자가 입력한 입력값(AppBar의 Title로 사용)
+                            startActivity(intent)
+                            */
+
+                        }
+                        RESPONSE_STATE.FAIL -> {
+                            Log.d(Constants.TAG, "HomeActivity api 호출 실패 : ${responseUserArrayList}")
+                        }
+                        RESPONSE_STATE.NONE -> {
+                            Toast.makeText(this, getString(R.string.No_search_results), Toast.LENGTH_SHORT).show()
+                            binding.searchEditText.setText("")
+                            //검색 결과가 없을 때만 검색창 초기화
+                        }
+                    }
+
+                    handleSearchButton()
+                    // 프로그래스바 비활성화
+                })
+
+            }
+
         }
     }// onCreate
 

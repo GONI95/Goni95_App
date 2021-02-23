@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.goni95_app.Model.Photo
+import com.example.goni95_app.Model.User
 import com.example.goni95_app.util.API
 import com.example.goni95_app.util.Constants
 import com.example.goni95_app.util.RESPONSE_STATE
@@ -108,7 +109,57 @@ class RetrofitManager {
 
 
     //사용자검색 api 호출
-    fun searchUsers() {
+    fun searchUsers(searchTerm: String?, completion: (RESPONSE_STATE, ArrayList<User>?) -> Unit) {
+        val term = searchTerm.let { it } ?: ""
+
+        mScope.launch {
+            var parsedUserDataArray = ArrayList<User>()
+
+            val job = launch(Dispatchers.IO) {
+                val call =
+                    iretrofitService?.searchUsers(searchTerm = term).let { it } ?: return@launch
+
+                val body = call.asJsonObject
+                val results = body.getAsJsonArray("results")
+                val total = body.get("total").asInt
+
+                Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} " +
+                        "/ message : ${total}")
+
+                if (total != 0) {
+                    // JsonArray result[] 내부의 JsonObject를 하나씩 받아 반복 수행
+                    results.forEach { resultItem ->
+                        val resultItemObject = resultItem.asJsonObject // get object
+
+                        val username = resultItemObject.get("username").asString    // user -> username
+
+                        val profile_image =
+                            resultItemObject.get("profile_image").asJsonObject.get("small").asString
+                            // object -> create_at
+
+                        Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} " +
+                                "/ message : ${username}")
+
+                        Log.d(Constants.TAG, "${HomeViewModel::class.java.simpleName} " +
+                                "/ message : ${profile_image}")
+
+                        val userItem = User(
+                            username = username,
+                            profile_image = profile_image,
+                        )
+
+                        parsedUserDataArray.add(userItem)
+                        //ArrayList에 Photo 타입의 데이터를 추가가
+                    }
+                }
+            }
+
+            job.join()
+            if(job.isCompleted){
+                completion(RESPONSE_STATE.OK, parsedUserDataArray)
+            }
+
+        }
 
     }
 }

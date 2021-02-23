@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         android:contentDescription="@string/content_description_search"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <!-- ifRoom : 공간이 더 있다면(ifRoom)의 액션으로 표시, 공간이 없다면 오버플로우 메뉴에 표시.
          collapseActionView : 아이템에 커스텀 액션 뷰가 지정된 경우, 축소된 형태로 표시

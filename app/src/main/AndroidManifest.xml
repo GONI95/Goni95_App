@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
-        <activity android:name=".ActivityDirectory.CollectionActivity"></activity>
+        <activity android:name=".ActivityDirectory.UserInfoActivity"></activity>
+        <activity android:name=".ActivityDirectory.CollectionActivity" />
         <activity android:name=".ActivityDirectory.HomeActivity" />
         <activity android:name=".ActivityDirectory.MainActivity">
             <intent-filter>

@@ -1,21 +1,21 @@
 <resources>
-<string name="app_name">Photo search API</string>
+    <string name="app_name">Photo search API</string>
 
-<!-- activity_home.xml / HomeAcitivty.kt -->
-<string name="Photo_search">Photo search</string>
-<string name="User_search">User Search</string>
-<string name="Enter_search_word">Please enter a search term.</string>
-<string name="String_length_limit">Search term limit: 15 characters</string>
-<string name="No_search_results">No results were found for your search.</string>
+    <!-- activity_home.xml / HomeAcitivty.kt -->
+    <string name="Photo_search">Photo search</string>
+    <string name="User_search">User Search</string>
+    <string name="Enter_search_word">Please enter a search term.</string>
+    <string name="String_length_limit">Search term limit: 15 characters</string>
+    <string name="No_search_results">No results were found for your search.</string>
 
-<!-- customlayout_button -->
-<string name="search">SEARCH</string>
+    <!-- customlayout_button -->
+    <string name="search">SEARCH</string>
 
-<!-- activity_collection -->
-<string name="page_title">Photo search</string>
-<string name="more">View more</string>
-<string name="content_description_search">Search for photos.</string>
-<string name="content_description_more">This is the more menu.</string>
-<string name="search_history_save">Save search term</string>
-<string name="search_history_clear">Delete all</string>
+    <!-- activity_collection -->
+    <string name="page_title">Photo search</string>
+    <string name="more">View more</string>
+    <string name="content_description_search">Search for photos.</string>
+    <string name="content_description_more">This is the more menu.</string>
+    <string name="search_history_save">Save search term</string>
+    <string name="search_history_clear">Delete all</string>
 </resources>

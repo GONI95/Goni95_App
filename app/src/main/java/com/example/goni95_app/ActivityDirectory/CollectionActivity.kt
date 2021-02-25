@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.goni95_app.Model.Photo
 import com.example.goni95_app.Model.SearchHistoryData
+import com.example.goni95_app.Model.User
 import com.example.goni95_app.R
 import com.example.goni95_app.databinding.ActivityCollectionBinding
 import com.example.goni95_app.recyclerview.ISearchHistoryRecyclerView
@@ -72,18 +73,22 @@ class CollectionActivity : AppCompatActivity(),
 
         Log.d(Constants.TAG, "CollectionActivity - onCreate() called")
 
-        val bundle = intent.getBundleExtra("array_bundle")
         val searchTerm = intent.getStringExtra("searchTerm")
         // intent로 보낸 bundle을 받기
+
+        val bundle = intent.getBundleExtra("array_bundle")
 
         photoList = bundle?.getSerializable("photo_array_list") as ArrayList<Photo>
         // 받은 bundle에서 직렬화하여 보낸 Photo타입의 리스트를 받기
 
+
+
         Log.d(Constants.TAG, "CollectionActivity - getBundleExtra / searchTerm : $searchTerm")
         Log.d(
             Constants.TAG,
-            "CollectionActivity - getSerializable / arraysize : ${photoList.count()}"
+            "CollectionActivity - getSerializable / photo_arraysize : ${photoList.count()}"
         )
+
         //PhotoGrid 리사이클러뷰 준비
         photoGridRecyclerViewSetting(photoList)
 

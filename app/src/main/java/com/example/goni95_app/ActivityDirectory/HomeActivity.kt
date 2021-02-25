@@ -144,9 +144,7 @@ class HomeActivity : AppCompatActivity() {
                         RESPONSE_STATE.OK -> {
                             Log.d(Constants.TAG, "HomeActivity api 호출 성공 : ${responseUserArrayList?.size}")
 
-
-                           /*
-                            val intent = Intent(this, CollectionActivity::class.java)
+                            val intent = Intent(this, UserInfoActivity::class.java)
                             val bundle = Bundle()
                             bundle.putSerializable("user_array_list", responseUserArrayList)
                             //bundle은 Parcelable 객체를 상속받아 구현된 직렬화 class로, bundle 객체는 내부적으로 HashMap을 사용하며,
@@ -158,7 +156,7 @@ class HomeActivity : AppCompatActivity() {
                             intent.putExtra("searchTerm", userSearchInput)
                             // 사용자가 입력한 입력값(AppBar의 Title로 사용)
                             startActivity(intent)
-                            */
+
 
                         }
                         RESPONSE_STATE.FAIL -> {

@@ -31,6 +31,8 @@
 
 - 디렉토리로 이동 : cd ~/MyProject (로컬 컴퓨터의 최상위 단계 디렉토리, Users 폴더를 의미)
 
+- git init
+
 - 로컬 저장소와 깃허브 원격 저장소 연결 : git remote add origin 깃 주소
 
 - 리모트 저장소 연결조회 : git remote와 git remote -v
